@@ -60,3 +60,14 @@ add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
 add_executable(unit_converter src/main.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
+
+add_executable(unit_golden_master_tests tests/unit/integration/golden_master_tests.cpp)
+target_link_libraries(unit_golden_master_tests PRIVATE Catch2::Catch2WithMain)
+target_include_directories(unit_golden_master_tests PRIVATE ${CMAKE_SOURCE_DIR}/tests)
+add_dependencies(unit_golden_master_tests unit_converter)
+target_compile_definitions(unit_golden_master_tests PRIVATE
+    UNIT_CONVERTER_EXE_PATH="$<TARGET_FILE:unit_converter>")
+add_test(NAME unit_golden_master_tests COMMAND unit_golden_master_tests
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+set_tests_properties(unit_golden_master_tests PROPERTIES
+    ENVIRONMENT "UNIT_CONVERTER_EXE=$<TARGET_FILE:unit_converter>")
