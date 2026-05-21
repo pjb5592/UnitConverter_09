@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** red
+**브랜치:** green
 
 ---
 
@@ -19,6 +19,112 @@
 | **03** | **catch2-bce-tests-green** | test_plan·BCE·Catch2 36 TC·ctest GREEN | ✅ |
 | **04** | **red-defect-list** | defect_list.md·README 결함 체크·회귀 확인 | ✅ |
 | **05** | **dual-track-red-tests** | Track A/B RED 12 TC·계약 헤더·링크 RED | ✅ |
+| **06** | **track-b-green-tc-b-01** | `UnitConverter` meter→feet GREEN·TC-B-01 PASS | ✅ |
+| **07** | **dual-track-green-complete** | Track A/B 12 TC GREEN·ctest 6/6·9 feat 커밋 | ✅ |
+| **08** | **refactor-coverage-f02-gate** | F02·Engine 위임·Domain 96.3%·Boundary 94.6% | ✅ |
+| **09** | **golden-master-approval-regression** | CLI stdout Golden Master·approve·ctest 7/7 | ✅ |
+| **10** | **golden-master-gm-tc** | GM-TC-01~04·UnitConverter_test·GoldenMaster ctest | ✅ |
+| **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
+
+---
+
+## Step 11 상세 (2026-05-21)
+
+**User:** README에 `## Golden Master 회귀 안전장치` (GM-01~09) — RED To-Do 아래 삽입.
+
+**Assistant:** 목차 링크 + 섹션 본문 추가. GM-01~06은 Step 09~10 코드 완료, 문서는 학습용 `[ ]` 유지.
+
+**검증:** 문서만 변경 · ctest **7/7** 회귀 유지 ✅
+
+**다음:** GM-07 CI workflow · GM-08 required check · README `[x]` 동기화.
+
+---
+
+## Step 10 상세 (2026-05-21)
+
+**User:** Golden Master 테스트 코드 — `input.txt`/`actual.txt` 캡처·섹션별 비교·TEST_F 스타일·`GoldenMaster` ctest·unified diff.
+
+**Assistant:**
+- `tests/test_golden_master.cpp` — `GoldenMasterTest` + GM-TC-01~04 (`TEST_CASE_METHOD`)
+- `GoldenMasterHelper.hpp` — `extractSection`, `unifiedDiff`, per-scenario work dir
+- CMake `UnitConverter_test`, `add_test(NAME GoldenMaster ...)`
+- `.gitignore` work/ · 삭제 `golden_master_tests.cpp` (통합 1건)
+
+**검증:** build ✅ · `ctest -R GoldenMaster` ✅ (4 cases, 24 assertions) · ctest **7/7** ✅
+
+**다음:** README GM 절차 · IT·Gherkin · `green`→`main` PR.
+
+---
+
+## Step 09 상세 (2026-05-21)
+
+**User:** Golden Master(Approval) — 4시나리오 기준 파일·approve 패턴·생성 스크립트·한글 설명.
+
+**Assistant:**
+- `tests/golden_master_expected.txt` — `[입력]` 블록·`---` 구분·CLI ROUND-LOCK(1자리) 실측
+- `GoldenMasterHelper.hpp` — 캡처·diff·approve
+- `golden_master_tests.cpp` — 기준 없으면 생성, 있으면 비교·FAIL+diff
+- `scripts/generate_golden_master.ps1` / `.sh`
+- CMake `unit_golden_master_tests` (ctest #7)
+
+**User:** `커밋해줘` → **`b45f77a`** feat(test) golden master (6 files).
+
+**검증:** build ✅ · ctest **7/7 PASS** · approve 자동 생성 ✅ · 스크립트 재생성 ✅
+
+**다음:** `.gitignore` golden 잔여 · README 절차 · IT·Gherkin · `green`→`main` PR.
+
+---
+
+## Step 08 상세 (2026-05-21)
+
+**User:** TC-A/B 전체·ctest·lcov 게이트( Domain ≥95% · Boundary ≥85% · F02 · main 분리) 점검.
+
+**Assistant (점검):** ctest 6/6·TC 전부 PASS. Domain **89%**·F02 **미달** (`LengthConversionRatios`, `withDefaultUnits` 리터럴). Boundary·`src/main.cpp` OK.
+
+**User:** `진행`
+
+**Assistant (REFACTOR):**
+- `UnitCatalogJson` — `config/units.json` 단일 출처
+- `UnitConverter` → `LengthConversionEngine` 위임; `LengthConversionRatios.hpp` 삭제
+- `ConfigLoader` JSON 파서 entity 위임; 레거시 `UnitConverter.cpp` 스텁
+- 커버리지 테스트: DisplayRounder 비유한수, `factorOf` unknown
+
+**검증:** build ✅ · ctest **6/6** · Domain **96.3%** · Boundary **94.6%** · `src` 리터럴 0건
+
+**다음:** ErrorPresenter · README/defect_list · IT · `green`→`main` PR.
+
+---
+
+## Step 07 상세 (2026-05-21)
+
+**User:** 커밋 순서표 2~9번 — Dual-Track 교차 GREEN(TC별 최소 구현·커밋) 반복 `진행` → [P] Report/Prompt Export·push.
+
+**Assistant:**
+- Track A: `ConversionUseCase`·`OutputFormatter` — 검증(TC-A-02~04)·happy/JSON/SRC-LOCK(TC-A-01,05,06)
+- Track B: `UnitConverter` 확장 — yard·역변환·convertAll·registerUnit·`loadConfig` fallback
+- CMake: `unit_control`, `OutputFormatter.cpp`
+- **9 feat(green) 커밋** (`35a3570`~`86bcc09`, Step 06 포함)
+
+**검증:** build ✅ · ctest **6/6 PASS** · `[track-a]` 6 TC · `[track-b]` 6 TC
+
+**다음:** REFACTOR(`UnitConverter`→Engine 위임)·ErrorPresenter·README/defect_list·커버리지·`green`→`main` PR.
+
+---
+
+## Step 06 상세 (2026-05-21)
+
+**User:** TDD GREEN만 — TC-B-01 `convert("meter",2.5,"feet")` ≈ 8.20210 (ε 1e-5); 비율 상수화; REFACTOR·타 TC 금지.
+
+**Assistant:**
+- RED: `UnitConverter.cpp` 없음 → 링크 RED (`unit_logic_red_tests`)
+- `LengthConversionRatios.hpp` — `kFeetPerMeter`, `kYardPerMeter`
+- `UnitConverter.cpp` — meter→feet 분기만; `convertAll`/`registerUnit` 스텁
+- `ConfigLoader::loadConfig` 링크 스텁 (`empty()`)
+- CMake `unit_entity`에 `UnitConverter.cpp` 추가
+
+**검증:** build ⚠️ (ui RED 링크 실패) · ctest 4/6 PASS · `[TC-B-01]` ✅ · `[TC-B-02]` FAIL(의도)
+
+**다음:** TC-B-02 GREEN → 허브 위임 REFACTOR → Track A `ConversionUseCase` GREEN.
 
 ---
 
@@ -115,5 +221,11 @@ docs/PRD.md
 | 03 | `Report/03.catch2-bce-tests-green-report-2026-05-21.md` | `Prompt/03.catch2-bce-tests-green-transcript-2026-05-21_prompt.md` |
 | 04 | `Report/04.red-defect-list-report-2026-05-21.md` | `Prompt/04.red-defect-list-transcript-2026-05-21_prompt.md` |
 | 05 | `Report/05.dual-track-red-tests-report-2026-05-21.md` | `Prompt/05.dual-track-red-tests-transcript-2026-05-21_prompt.md` |
+| 06 | `Report/06.track-b-green-tc-b-01-report-2026-05-21.md` | `Prompt/06.track-b-green-tc-b-01-transcript-2026-05-21_prompt.md` |
+| 07 | `Report/07.dual-track-green-complete-report-2026-05-21.md` | `Prompt/07.dual-track-green-complete-transcript-2026-05-21_prompt.md` |
+| 08 | `Report/08.refactor-coverage-f02-gate-report-2026-05-21.md` | `Prompt/08.refactor-coverage-f02-gate-transcript-2026-05-21_prompt.md` |
+| 09 | `Report/09.golden-master-approval-report-2026-05-21.md` | `Prompt/09.golden-master-approval-transcript-2026-05-21_prompt.md` |
+| 10 | `Report/10.golden-master-gm-tc-report-2026-05-21.md` | `Prompt/10.golden-master-gm-tc-transcript-2026-05-21_prompt.md` |
+| 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).

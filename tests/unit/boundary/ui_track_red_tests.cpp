@@ -114,3 +114,4 @@ TEST_CASE("TC-A-06_json_output_matches_schema", "[red][track-a][TC-A-06]") {
     REQUIRE(json.find(R"("unit":"feet","value":8.202100)") != std::string::npos);
     REQUIRE(json.find(R"("unit":"yard","value":2.734025)") != std::string::npos);
 }
+ 

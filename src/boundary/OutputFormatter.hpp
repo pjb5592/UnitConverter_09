@@ -12,7 +12,7 @@ struct ConversionRow {
 
 class OutputFormatter {
 public:
-    static std::string formatTableLine(double sourceValue,
+    static std::string formatTableLine(const std::string& sourceValueText,
                                        const std::string& sourceUnit,
                                        double targetValue,
                                        const std::string& targetUnit);

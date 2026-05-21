@@ -2,8 +2,10 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <cmath>
+#include <limits>
 #include <string>
 
+#include "entity/DisplayRounder.hpp"
 #include "entity/LengthConversionEngine.hpp"
 #include "entity/UnitCatalog.hpp"
 #include "fixtures/TestConstants.hpp"
@@ -144,6 +146,17 @@ TEST_CASE("test_convert_boundary_feet_fractional_meter_hub", "[convert][boundary
 
     // Then: equals 1 meter expressed in yards (1.09361)
     REQUIRE(result == Approx(1.09361).margin(test_constants::kEpsilonRelaxed));
+}
+
+TEST_CASE("test_display_rounder_non_finite_passthrough", "[convert][boundary]") {
+    // Given: non-finite values (no rounding applied)
+    const double nanValue = std::numeric_limits<double>::quiet_NaN();
+    const double infValue = std::numeric_limits<double>::infinity();
+
+    // When / Then
+    REQUIRE_FALSE(std::isfinite(entity::roundOneDecimal(nanValue)));
+    REQUIRE(std::isnan(entity::roundOneDecimal(nanValue)));
+    REQUIRE(entity::roundOneDecimal(infValue) == infValue);
 }
 
 TEST_CASE("test_convert_boundary_display_rounds_half_away", "[convert][boundary]") {
