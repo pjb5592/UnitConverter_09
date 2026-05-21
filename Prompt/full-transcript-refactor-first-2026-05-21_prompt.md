@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `refactoring` (Step 15 Phase 6 종합 Export)
+**브랜치:** `feature/new_feature` (Step 16 Bonus DecayingUnit RED)
 
 ---
 
@@ -29,6 +29,26 @@
 | **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
 | **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
 | **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
+| **16** | **bonus-decaying-unit-red** | DecayingUnit RED BT-01~06·`unit_decaying_tests` FAIL | 🔴 RED |
+
+---
+
+## Step 16 상세 (2026-05-21)
+
+**User:** 신규 기능 RED — `registerUnit("cubit",0.4572)`·convert·convertAll·음수 예외·BT-01~06·`[bonus]`·구현 금지. 산출: `DecayingUnit.cpp` + `test_decaying_unit.cpp` 실패 상태.
+
+**Assistant:**
+- `src/DecayingUnit.hpp` · `src/DecayingUnit.cpp` (내부 `Item`, RED 스텁) · `tests/test_decaying_unit.cpp`
+- `CMakeLists.txt` — `unit_decaying` · `unit_decaying_tests`
+- `UnitConverter.cpp` 미수정
+
+**검증:** build ✅ · `unit_decaying_tests` 6 assertions FAIL (RED) · ctest **9/10** (기존 9 PASS)
+
+**User:** [P] 문서·배포 — Step 16 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 16 · Transcript 16 · full-transcript 갱신 · commit·push.
+
+**다음:** GREEN `DecayingUnit` 구현 → ctest 10/10.
 
 ---
 
@@ -301,6 +321,7 @@ docs/PRD.md
 | 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
 | 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
 | 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
+| 16 | `Report/16.bonus-decaying-unit-red-report-2026-05-21.md` | `Prompt/16.bonus-decaying-unit-red-transcript-2026-05-21_prompt.md` |
 
 **Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 
