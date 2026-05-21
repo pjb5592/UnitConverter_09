@@ -7,8 +7,7 @@ namespace control {
 ConversionUseCase::ConversionUseCase(const entity::UnitCatalog& catalog) : catalog_(catalog) {}
 
 std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
-    boundary::InputParser::parse(line);
-    (void)catalog_;
+    boundary::InputParser::parseConvertLine(line, catalog_);
     return {};
 }
 
