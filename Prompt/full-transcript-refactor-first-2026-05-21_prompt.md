@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `feature/new_feature` (Step 17 Bonus DecayingUnit GREEN)
+**브랜치:** `feature/new_feature` (Step 18 인수 검증 게이트)
 
 ---
 
@@ -31,6 +31,25 @@
 | **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
 | **16** | **bonus-decaying-unit-red** | DecayingUnit RED BT-01~06·`unit_decaying_tests` FAIL | 🔴 RED |
 | **17** | **bonus-decaying-unit-green** | OCP registry GREEN·BT-01~06 PASS·ctest 10/10 | ✅ GREEN |
+| **18** | **feature-verification-dod-gate** | ctest 10/10·GM·TC-A/B·lcov PASS·F02(DecayingUnit) 주의·PR 권고 | ✅ 검증 |
+
+---
+
+## Step 18 상세 (2026-05-21)
+
+**User:** 신규 기능 완료 후 전체 테스트·커버리지·Golden Master·BT/TC-A/B·음수 registerUnit·Domain≥95%/Boundary≥85% 확인. 이후 `feature/new_feature`→`B_09` PR·`main`·`v1.0.0`.
+
+**Assistant:**
+- `cmake` build · `ctest -V` — **10/10 PASS** (decaying + GoldenMaster)
+- `run_coverage_gate.ps1` — entity **95.7%** · boundary **94.8%** · ctest 10/10 · **F02 FAIL** (`DecayingUnit.cpp` 리터럴)
+- BT-01~06 `[bonus]` · TC-A-01~07 · TC-B-01~07 · GM meter/feet/yard — PASS
+- `gh` 미설치 — PR/태그 수동 권고
+
+**User:** [P] 문서·배포 — Step 18 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 18 · Transcript 18 · full-transcript 갱신 · commit·push.
+
+**다음:** PR `feature/new_feature`→`B_09` · F02 REFACTOR(선택) · `v1.0.0`.
 
 ---
 
@@ -342,6 +361,7 @@ docs/PRD.md
 | 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
 | 16 | `Report/16.bonus-decaying-unit-red-report-2026-05-21.md` | `Prompt/16.bonus-decaying-unit-red-transcript-2026-05-21_prompt.md` |
 | 17 | `Report/17.bonus-decaying-unit-green-report-2026-05-21.md` | `Prompt/17.bonus-decaying-unit-green-transcript-2026-05-21_prompt.md` |
+| 18 | `Report/18.feature-verification-dod-gate-report-2026-05-21.md` | `Prompt/18.feature-verification-dod-gate-transcript-2026-05-21_prompt.md` |
 
 **Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 
