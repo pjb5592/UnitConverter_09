@@ -24,6 +24,19 @@
 | **08** | **refactor-coverage-f02-gate** | F02·Engine 위임·Domain 96.3%·Boundary 94.6% | ✅ |
 | **09** | **golden-master-approval-regression** | CLI stdout Golden Master·approve·ctest 7/7 | ✅ |
 | **10** | **golden-master-gm-tc** | GM-TC-01~04·UnitConverter_test·GoldenMaster ctest | ✅ |
+| **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
+
+---
+
+## Step 11 상세 (2026-05-21)
+
+**User:** README에 `## Golden Master 회귀 안전장치` (GM-01~09) — RED To-Do 아래 삽입.
+
+**Assistant:** 목차 링크 + 섹션 본문 추가. GM-01~06은 Step 09~10 코드 완료, 문서는 학습용 `[ ]` 유지.
+
+**검증:** 문서만 변경 · ctest **7/7** 회귀 유지 ✅
+
+**다음:** GM-07 CI workflow · GM-08 required check · README `[x]` 동기화.
 
 ---
 
@@ -213,5 +226,6 @@ docs/PRD.md
 | 08 | `Report/08.refactor-coverage-f02-gate-report-2026-05-21.md` | `Prompt/08.refactor-coverage-f02-gate-transcript-2026-05-21_prompt.md` |
 | 09 | `Report/09.golden-master-approval-report-2026-05-21.md` | `Prompt/09.golden-master-approval-transcript-2026-05-21_prompt.md` |
 | 10 | `Report/10.golden-master-gm-tc-report-2026-05-21.md` | `Prompt/10.golden-master-gm-tc-transcript-2026-05-21_prompt.md` |
+| 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
