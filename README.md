@@ -323,8 +323,8 @@ ctest --test-dir build --output-on-failure
 - [ ] 전체 TOTAL: 90%+
 
 ### 결함 목록 연결
-- [ ] defect_list.md 생성 및 발견 결함 기록
-- [ ] 모든 결함 수정 후 회귀 테스트 통과 확인
+- [x] [defect_list.md](docs/defect_list.md) 생성 및 발견 결함 기록 (DEF-001~009)
+- [x] 모든 결함 수정 후 회귀 테스트 통과 확인 (`ctest` 4/4 PASS)
 
 ---
 
@@ -479,6 +479,7 @@ MIT License — **학습·실습·포크 자유**. 상용 재배포 시에도 LI
 | [docs/traceability-matrix.md](docs/traceability-matrix.md) | Story ↔ To-Do ↔ PRD |
 | [docs/gherkin.md](docs/gherkin.md) | Gherkin Sc.1~13 |
 | [docs/test_plan.md](docs/test_plan.md) | 테스트 계획 · RED 체크리스트 |
+| [docs/defect_list.md](docs/defect_list.md) | RED 결함 목록 · TC 추적 |
 | [.cursorrules](.cursorrules) | BCE · TDD · forbidden |
 
 ### 6시간 실습 Activities (요약)
