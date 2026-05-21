@@ -8,6 +8,9 @@ double UnitConverter::convert(const std::string& fromUnit, double value, const s
     if (fromUnit == "meter" && toUnit == "feet") {
         return value * length_conversion_ratios::kFeetPerMeter;
     }
+    if (fromUnit == "meter" && toUnit == "yard") {
+        return value * length_conversion_ratios::kYardPerMeter;
+    }
     return 0.0;
 }
 
