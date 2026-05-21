@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "boundary/CliReader.hpp"
 #include "boundary/ErrorPresenter.hpp"
 #include "boundary/InputParser.hpp"
 #include "control/ConversionUseCase.hpp"
@@ -12,9 +13,8 @@ int main() {
             data::ConfigLoader::loadFromJson(entity::resolveDefaultUnitsJsonPath());
         const control::ConversionUseCase useCase(catalog);
 
-        std::cout << "Insert value for converting (ex: meter:2.5): ";
         std::string line;
-        if (!std::getline(std::cin, line)) {
+        if (!boundary::CliReader::readConvertLine(std::cin, std::cout, line)) {
             return 1;
         }
 

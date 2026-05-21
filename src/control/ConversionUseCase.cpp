@@ -22,9 +22,8 @@ std::vector<boundary::ConversionRow> ConversionUseCase::buildConversionRows(
 
 std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
     const boundary::ParsedInput parsed = boundary::InputParser::parseConvertLine(line, catalog_);
-    const std::size_t colon = line.find(':');
-    const std::string sourceValueText =
-        boundary::OutputFormatter::formatSourceValueToken(line.substr(colon + 1));
+    const std::string sourceValueText = boundary::OutputFormatter::formatSourceValueToken(
+        boundary::InputParser::valueTokenFromLine(line));
 
     const std::vector<boundary::ConversionRow> conversions = buildConversionRows(parsed);
     std::vector<std::string> lines;

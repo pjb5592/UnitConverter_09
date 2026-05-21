@@ -59,6 +59,10 @@ bool isValidUnitName(const std::string& unit) {
 
 }  // namespace
 
+std::string InputParser::valueTokenFromLine(const std::string& line) {
+    return splitUnitValueLine(line).valueToken;
+}
+
 ParsedInput InputParser::parse(const std::string& line) {
     const UnitValueTokens tokens = splitUnitValueLine(line);
 
