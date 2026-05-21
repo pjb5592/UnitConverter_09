@@ -7,27 +7,43 @@ namespace entity {
 
 namespace {
 
-UnitCatalog& catalogState() {
+UnitCatalog& sharedCatalog() {
     static UnitCatalog catalog = UnitCatalog::withDefaultUnits();
     return catalog;
+}
+
+double convertWithCatalog(UnitCatalog& catalog, const std::string& fromUnit, double value,
+                          const std::string& toUnit) {
+    const LengthConversionEngine engine(catalog);
+    return engine.convert(fromUnit, value, toUnit);
+}
+
+std::vector<std::pair<std::string, double>> convertAllWithCatalog(UnitCatalog& catalog,
+                                                                 const std::string& fromUnit,
+                                                                 double value) {
+    const LengthConversionEngine engine(catalog);
+    return engine.convertAll(fromUnit, value);
+}
+
+void registerUnitWithCatalog(UnitCatalog& catalog, const std::string& name,
+                             double ratioToMeter) {
+    // ratioToMeter: meters represented by one unit of `name` (e.g. inch → 0.0254 m)
+    catalog.registerUnit(name, 1.0 / ratioToMeter);
 }
 
 }  // namespace
 
 double UnitConverter::convert(const std::string& fromUnit, double value, const std::string& toUnit) {
-    const LengthConversionEngine engine(catalogState());
-    return engine.convert(fromUnit, value, toUnit);
+    return convertWithCatalog(sharedCatalog(), fromUnit, value, toUnit);
 }
 
 std::vector<std::pair<std::string, double>> UnitConverter::convertAll(const std::string& fromUnit,
                                                                       double value) {
-    const LengthConversionEngine engine(catalogState());
-    return engine.convertAll(fromUnit, value);
+    return convertAllWithCatalog(sharedCatalog(), fromUnit, value);
 }
 
 void UnitConverter::registerUnit(const std::string& name, double ratioToMeter) {
-    // ratioToMeter: meters represented by one unit of `name` (e.g. inch → 0.0254 m)
-    catalogState().registerUnit(name, 1.0 / ratioToMeter);
+    registerUnitWithCatalog(sharedCatalog(), name, ratioToMeter);
 }
 
 }  // namespace entity

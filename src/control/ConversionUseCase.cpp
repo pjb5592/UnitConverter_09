@@ -35,8 +35,8 @@ std::vector<std::string> ConversionUseCase::convertTable(const std::string& line
     return lines;
 }
 
-std::vector<std::string> ConversionUseCase::convertDisplayTable(const std::string& line) const {
-    const boundary::ParsedInput parsed = boundary::InputParser::parseConvertLine(line, catalog_);
+std::vector<std::string> ConversionUseCase::formatDisplayTableLines(
+    const boundary::ParsedInput& parsed) const {
     const entity::LengthConversionEngine engine(catalog_);
 
     std::vector<std::string> lines;
@@ -48,6 +48,10 @@ std::vector<std::string> ConversionUseCase::convertDisplayTable(const std::strin
             parsed.value, parsed.unit, targetDisplay, unit.name));
     }
     return lines;
+}
+
+std::vector<std::string> ConversionUseCase::convertDisplayTable(const std::string& line) const {
+    return formatDisplayTableLines(boundary::InputParser::parseConvertLine(line, catalog_));
 }
 
 std::string ConversionUseCase::convertJson(const std::string& line) const {
