@@ -1,5 +1,7 @@
 #include "boundary/InputParser.hpp"
 
+#include "boundary/ErrorCodes.hpp"
+
 #include <cctype>
 #include <stdexcept>
 
@@ -80,7 +82,7 @@ ParsedInput InputParser::parseConvertLine(const std::string& line,
                                          const entity::UnitCatalog& catalog) {
     const ParsedInput parsed = parse(line);
     if (!catalog.hasUnit(parsed.unit)) {
-        throw std::invalid_argument("unknown unit");
+        throw std::invalid_argument(ErrorCodes::kUnknownUnitParseMessage);
     }
     return parsed;
 }

@@ -20,8 +20,8 @@ std::vector<boundary::ConversionRow> ConversionUseCase::buildConversionRows(
     return conversions;
 }
 
-std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
-    const boundary::ParsedInput parsed = boundary::InputParser::parseConvertLine(line, catalog_);
+std::vector<std::string> ConversionUseCase::formatTableLines(const boundary::ParsedInput& parsed,
+                                                            const std::string& line) const {
     const std::string sourceValueText = boundary::OutputFormatter::formatSourceValueToken(
         boundary::InputParser::valueTokenFromLine(line));
 
@@ -33,6 +33,11 @@ std::vector<std::string> ConversionUseCase::convertTable(const std::string& line
                                                                    row.targetValue, row.targetUnit));
     }
     return lines;
+}
+
+std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
+    const boundary::ParsedInput parsed = boundary::InputParser::parseConvertLine(line, catalog_);
+    return formatTableLines(parsed, line);
 }
 
 std::vector<std::string> ConversionUseCase::formatDisplayTableLines(

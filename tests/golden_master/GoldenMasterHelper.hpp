@@ -1,5 +1,7 @@
 #pragma once
 
+#include "boundary/CliReader.hpp"
+
 #include <cstdio>
 #include <cstring>
 #include <filesystem>
@@ -11,8 +13,7 @@
 
 namespace golden_master {
 
-inline constexpr const char* kPromptPrefix =
-    "Insert value for converting (ex: meter:2.5): ";
+inline constexpr const char* kPromptPrefix = boundary::CliReader::kConvertPrompt;
 
 inline std::string readFile(const std::filesystem::path& path) {
     std::ifstream in(path, std::ios::binary);

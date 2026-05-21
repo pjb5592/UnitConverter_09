@@ -21,6 +21,9 @@ private:
     std::vector<boundary::ConversionRow> buildConversionRows(
         const boundary::ParsedInput& parsed) const;
 
+    std::vector<std::string> formatTableLines(const boundary::ParsedInput& parsed,
+                                              const std::string& line) const;
+
     std::vector<std::string> formatDisplayTableLines(const boundary::ParsedInput& parsed) const;
 
     entity::UnitCatalog catalog_;

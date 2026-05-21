@@ -64,8 +64,9 @@ add_executable(unit_converter src/main.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
 
 add_executable(UnitConverter_test tests/test_golden_master.cpp)
-target_link_libraries(UnitConverter_test PRIVATE Catch2::Catch2WithMain)
-target_include_directories(UnitConverter_test PRIVATE ${CMAKE_SOURCE_DIR}/tests)
+target_link_libraries(UnitConverter_test PRIVATE unit_boundary Catch2::Catch2WithMain)
+target_include_directories(UnitConverter_test PRIVATE ${CMAKE_SOURCE_DIR}/src
+                                                      ${CMAKE_SOURCE_DIR}/tests)
 add_dependencies(UnitConverter_test unit_converter)
 target_compile_definitions(UnitConverter_test PRIVATE
     UNIT_CONVERTER_EXE_PATH="$<TARGET_FILE:unit_converter>")
