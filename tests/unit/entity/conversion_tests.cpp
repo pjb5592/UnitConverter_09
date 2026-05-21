@@ -8,6 +8,7 @@
 #include "entity/DisplayRounder.hpp"
 #include "entity/LengthConversionEngine.hpp"
 #include "entity/UnitCatalog.hpp"
+#include "entity/UnitConverter.hpp"
 #include "fixtures/TestConstants.hpp"
 
 using Catch::Approx;
@@ -168,4 +169,10 @@ TEST_CASE("test_convert_boundary_display_rounds_half_away", "[convert][boundary]
 
     // Then: 1.0 meter display from PRD Sc.2 style
     REQUIRE(display == Approx(1.0).margin(test_constants::kEpsilonStrict));
+}
+
+TEST_CASE("test_unit_converter_facade_delegates_to_shared_catalog", "[convert][facade]") {
+    const double meters = entity::UnitConverter::convert("meter", 2.5, "meter");
+
+    REQUIRE(meters == Approx(2.5).margin(test_constants::kEpsilonStrict));
 }
