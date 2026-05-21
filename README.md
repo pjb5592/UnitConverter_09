@@ -12,6 +12,7 @@
 - [입력 형식 계약](#입력-형식-계약)
 - [아키텍처](#아키텍처)
 - [테스트 실행](#테스트-실행)
+- [RED 단계 To-Do 리스트](#red-단계-to-do-리스트)
 - [설정 파일 (JSON)](#설정-파일-json)
 - [출력 포맷](#출력-포맷)
 - [비목표 (Non-Goals)](#비목표-non-goals)
@@ -293,6 +294,42 @@ ctest --test-dir build --output-on-failure
 
 ---
 
+## RED 단계 To-Do 리스트
+
+> 이 체크리스트는 @docs/test_plan.md 기반으로 생성되었습니다.
+> 각 항목은 **RED(실패 테스트 작성)** 완료 시 체크합니다. (GREEN 통과·커버리지 달성과 별개)
+
+**RED 작성 완료 기준 (2026-05-21):** Catch2에 해당 TC가 존재. Step 03 — `parser_tests`, `conversion_tests`, `catalog_registration_tests`, `config_loader_tests`. Step 05 — `ui_track_red_tests`(TC-A-01~06), `logic_track_red_tests`(TC-B-01~06). Step 05 신규 스위트 2개는 **링크 RED**(구현 `.cpp` 미작성)이며, Step 03 스위트 4개는 **실행 GREEN**.
+
+### Track A — UI / Boundary 테스트
+- [x] TC-A-01: 정상 입력 "meter:2.5" → 변환 결과 반환 (Happy Path) — `ui_track_red_tests` · Step 05
+- [x] TC-A-02: ":" 없는 입력 → std::invalid_argument 발생 — `ui_track_red_tests`, `parser_tests` · Step 03/05
+- [x] TC-A-03: 음수 입력 "meter:-1.0" → std::invalid_argument 발생 — `ui_track_red_tests`, `parser_tests`
+- [x] TC-A-04: 없는 단위 "parsec:1.0" → std::invalid_argument 발생 — `ui_track_red_tests`, `parser_tests`
+- [x] TC-A-05: 소수점 파싱 실패 "meter:abc" → std::invalid_argument 발생 — `parser_tests`
+- [x] TC-A-06: 출력 포맷에 원 입력 단위·값 보존 ("2.5 meter = ...") — `ui_track_red_tests`(SRC-LOCK), `parser_tests`
+- [x] TC-A-07: value=0 경계값 처리 확인 — `conversion_tests` (`convertAll` zero 경계)
+
+### Track B — Domain / Logic 테스트
+- [x] TC-B-01: convert("meter", 2.5, "feet") == 8.20210 (오차 1e-5) — `conversion_tests`, `logic_track_red_tests`
+- [x] TC-B-02: convert("meter", 1.0, "yard") == 1.09361 (오차 1e-5) — `conversion_tests`(2.5 yard), `logic_track_red_tests`
+- [x] TC-B-03: convert("feet", 1.0, "meter") == 0.30480 (역변환) — `conversion_tests`
+- [x] TC-B-04: convertAll("meter", 1.0) → 모든 등록 단위 변환 반환 — `conversion_tests`, `logic_track_red_tests`
+- [x] TC-B-05: registerUnit("cubit", 0.4572) 후 변환 가능 — `catalog_registration_tests`, `logic_track_red_tests`(inch)
+- [x] TC-B-06: loadConfig(유효한 경로) → 비율 정상 로드 — `config_loader_tests`, `logic_track_red_tests`
+- [x] TC-B-07: loadConfig(없는 경로) → 기본값(3.28084/1.09361) 유지 — `config_loader_tests`, `logic_track_red_tests`
+
+### 커버리지 목표
+- [ ] Domain Logic: 95%+ (# gcov / lcov)
+- [ ] Boundary Layer: 85%+
+- [ ] 전체 TOTAL: 90%+
+
+### 결함 목록 연결
+- [x] [defect_list.md](docs/defect_list.md) 생성 및 발견 결함 기록 (DEF-001~009)
+- [x] 모든 결함 수정 후 회귀 테스트 통과 확인 (`ctest` 4/4 PASS)
+
+---
+
 ## 설정 파일 (JSON)
 
 **위치:** `config/units.json` (기동 시 로드, JSON이 정본 · YAML은 v2 선택)
@@ -443,6 +480,8 @@ MIT License — **학습·실습·포크 자유**. 상용 재배포 시에도 LI
 | [docs/TODO.md](docs/TODO.md) | TD-01~25 · 마일스톤 |
 | [docs/traceability-matrix.md](docs/traceability-matrix.md) | Story ↔ To-Do ↔ PRD |
 | [docs/gherkin.md](docs/gherkin.md) | Gherkin Sc.1~13 |
+| [docs/test_plan.md](docs/test_plan.md) | 테스트 계획 · RED 체크리스트 |
+| [docs/defect_list.md](docs/defect_list.md) | RED 결함 목록 · TC 추적 |
 | [.cursorrules](.cursorrules) | BCE · TDD · forbidden |
 
 ### 6시간 실습 Activities (요약)
