@@ -1,15 +1,14 @@
 #include <iostream>
 
 #include "boundary/InputParser.hpp"
+#include "control/ConversionUseCase.hpp"
 #include "data/ConfigLoader.hpp"
-#include "entity/DisplayRounder.hpp"
-#include "entity/LengthConversionEngine.hpp"
 
 int main() {
     try {
         const entity::UnitCatalog catalog =
             data::ConfigLoader::loadFromJson("config/units.json");
-        const entity::LengthConversionEngine engine(catalog);
+        const control::ConversionUseCase useCase(catalog);
 
         std::cout << "Insert value for converting (ex: meter:2.5): ";
         std::string line;
@@ -23,12 +22,8 @@ int main() {
             return 1;
         }
 
-        const double sourceDisplay = entity::roundOneDecimal(parsed.value);
-        for (const auto& unit : catalog.units()) {
-            const double targetDisplay =
-                engine.convertDisplay(parsed.unit, parsed.value, unit.name);
-            std::cout << sourceDisplay << ' ' << parsed.unit << " = " << targetDisplay << ' '
-                      << unit.name << '\n';
+        for (const std::string& outputLine : useCase.convertDisplayTable(line)) {
+            std::cout << outputLine << '\n';
         }
         return 0;
     } catch (const data::ConfigLoadError& ex) {

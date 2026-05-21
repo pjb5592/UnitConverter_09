@@ -1,5 +1,7 @@
 #include "boundary/OutputFormatter.hpp"
 
+#include "entity/DisplayRounder.hpp"
+
 #include <iomanip>
 #include <sstream>
 
@@ -12,6 +14,16 @@ std::string OutputFormatter::formatTableLine(const std::string& sourceValueText,
     std::ostringstream line;
     line << sourceValueText << ' ' << sourceUnit << " = ";
     line << std::fixed << std::setprecision(6) << targetValue << ' ' << targetUnit;
+    return line.str();
+}
+
+std::string OutputFormatter::formatDisplayTableLine(double sourceValue,
+                                                    const std::string& sourceUnit,
+                                                    double targetValue,
+                                                    const std::string& targetUnit) {
+    std::ostringstream line;
+    line << entity::roundOneDecimal(sourceValue) << ' ' << sourceUnit << " = " << targetValue << ' '
+         << targetUnit;
     return line.str();
 }
 

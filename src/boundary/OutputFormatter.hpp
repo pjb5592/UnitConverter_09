@@ -17,6 +17,11 @@ public:
                                        double targetValue,
                                        const std::string& targetUnit);
 
+    static std::string formatDisplayTableLine(double sourceValue,
+                                              const std::string& sourceUnit,
+                                              double targetValue,
+                                              const std::string& targetUnit);
+
     static std::string formatJson(const std::string& sourceUnit,
                                   double sourceValue,
                                   const std::vector<ConversionRow>& conversions);
