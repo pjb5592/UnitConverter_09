@@ -14,7 +14,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 add_library(unit_entity
-    src/entity/UnitDefinition.cpp
     src/entity/UnitCatalog.cpp
     src/entity/UnitCatalogJson.cpp
     src/entity/LengthConversionEngine.cpp
@@ -55,6 +54,7 @@ add_unit_test(unit_conversion_tests tests/unit/entity/conversion_tests.cpp)
 add_unit_test(unit_boundary_tests tests/unit/boundary/parser_tests.cpp)
 add_unit_test(unit_catalog_tests tests/unit/entity/catalog_registration_tests.cpp)
 add_unit_test(unit_config_tests tests/unit/data/config_loader_tests.cpp)
+add_unit_test(unit_catalog_json_tests tests/unit/entity/unit_catalog_json_tests.cpp)
 add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
 add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 

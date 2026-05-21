@@ -3,11 +3,12 @@
 #include "boundary/InputParser.hpp"
 #include "control/ConversionUseCase.hpp"
 #include "data/ConfigLoader.hpp"
+#include "entity/UnitCatalogJson.hpp"
 
 int main() {
     try {
         const entity::UnitCatalog catalog =
-            data::ConfigLoader::loadFromJson("config/units.json");
+            data::ConfigLoader::loadFromJson(entity::resolveDefaultUnitsJsonPath());
         const control::ConversionUseCase useCase(catalog);
 
         std::cout << "Insert value for converting (ex: meter:2.5): ";
