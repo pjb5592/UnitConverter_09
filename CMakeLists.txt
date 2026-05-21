@@ -59,6 +59,15 @@ add_unit_test(unit_catalog_json_tests tests/unit/entity/unit_catalog_json_tests.
 add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
 add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
+add_executable(unit_cli_integration_tests
+    tests/unit/boundary/cli_app_integration_tests.cpp
+    src/boundary/CliApp.cpp)
+target_link_libraries(unit_cli_integration_tests PRIVATE unit_entity unit_data unit_boundary
+                      unit_control Catch2::Catch2WithMain)
+target_include_directories(unit_cli_integration_tests PRIVATE ${CMAKE_SOURCE_DIR}/src
+                                                           ${CMAKE_SOURCE_DIR}/tests)
+add_test(NAME unit_cli_integration_tests COMMAND unit_cli_integration_tests)
+
 add_executable(unit_converter src/main.cpp src/boundary/CliApp.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
 

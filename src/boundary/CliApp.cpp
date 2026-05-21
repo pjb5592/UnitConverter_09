@@ -15,9 +15,15 @@
 namespace boundary {
 
 int CliApp::run(std::istream& in, std::ostream& out, std::ostream& err) const {
+    return run(in, out, err, std::string{});
+}
+
+int CliApp::run(std::istream& in, std::ostream& out, std::ostream& err,
+                const std::string& configPath) const {
     try {
-        const entity::UnitCatalog catalog =
-            data::ConfigLoader::loadFromJson(entity::resolveDefaultUnitsJsonPath());
+        const std::string unitsPath =
+            configPath.empty() ? entity::resolveDefaultUnitsJsonPath() : configPath;
+        const entity::UnitCatalog catalog = data::ConfigLoader::loadFromJson(unitsPath);
         const control::ConversionUseCase useCase(catalog);
 
         std::string line;
