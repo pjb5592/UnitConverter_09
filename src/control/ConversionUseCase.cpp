@@ -6,25 +6,6 @@
 
 namespace control {
 
-namespace {
-
-std::string formatSourceValueText(const std::string& valueToken) {
-    const std::size_t dot = valueToken.find('.');
-    if (dot == std::string::npos) {
-        return valueToken;
-    }
-    std::string fractional = valueToken.substr(dot + 1);
-    if (fractional.size() >= 5) {
-        while (fractional.size() < 6) {
-            fractional.push_back('0');
-        }
-        return valueToken.substr(0, dot + 1) + fractional;
-    }
-    return valueToken;
-}
-
-}  // namespace
-
 ConversionUseCase::ConversionUseCase(const entity::UnitCatalog& catalog) : catalog_(catalog) {}
 
 std::vector<boundary::ConversionRow> ConversionUseCase::buildConversionRows(
@@ -42,7 +23,8 @@ std::vector<boundary::ConversionRow> ConversionUseCase::buildConversionRows(
 std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
     const boundary::ParsedInput parsed = boundary::InputParser::parseConvertLine(line, catalog_);
     const std::size_t colon = line.find(':');
-    const std::string sourceValueText = formatSourceValueText(line.substr(colon + 1));
+    const std::string sourceValueText =
+        boundary::OutputFormatter::formatSourceValueToken(line.substr(colon + 1));
 
     const std::vector<boundary::ConversionRow> conversions = buildConversionRows(parsed);
     std::vector<std::string> lines;

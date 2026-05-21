@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "boundary/ErrorPresenter.hpp"
 #include "boundary/InputParser.hpp"
 #include "control/ConversionUseCase.hpp"
 #include "data/ConfigLoader.hpp"
@@ -19,7 +20,7 @@ int main() {
 
         const boundary::ParsedInput parsed = boundary::InputParser::parse(line);
         if (!catalog.hasUnit(parsed.unit)) {
-            std::cerr << "Unknown unit: " << parsed.unit << std::endl;
+            boundary::ErrorPresenter::writeUnknownUnit(std::cerr, parsed.unit);
             return 1;
         }
 
@@ -27,11 +28,8 @@ int main() {
             std::cout << outputLine << '\n';
         }
         return 0;
-    } catch (const data::ConfigLoadError& ex) {
-        std::cerr << ex.what() << std::endl;
-        return 1;
     } catch (const std::exception& ex) {
-        std::cerr << ex.what() << std::endl;
+        boundary::ErrorPresenter::writeException(std::cerr, ex);
         return 1;
     }
 }

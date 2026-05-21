@@ -7,6 +7,28 @@
 
 namespace boundary {
 
+namespace {
+
+constexpr std::size_t kMinFractionalDigitsForSixDigitDisplay = 5;
+constexpr std::size_t kSixDigitDisplayFractionalWidth = 6;
+
+}  // namespace
+
+std::string OutputFormatter::formatSourceValueToken(const std::string& valueToken) {
+    const std::size_t dot = valueToken.find('.');
+    if (dot == std::string::npos) {
+        return valueToken;
+    }
+    std::string fractional = valueToken.substr(dot + 1);
+    if (fractional.size() >= kMinFractionalDigitsForSixDigitDisplay) {
+        while (fractional.size() < kSixDigitDisplayFractionalWidth) {
+            fractional.push_back('0');
+        }
+        return valueToken.substr(0, dot + 1) + fractional;
+    }
+    return valueToken;
+}
+
 std::string OutputFormatter::formatTableLine(const std::string& sourceValueText,
                                              const std::string& sourceUnit,
                                              double targetValue,
