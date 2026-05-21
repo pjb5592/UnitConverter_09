@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** red
+**브랜치:** green
 
 ---
 
@@ -20,6 +20,23 @@
 | **04** | **red-defect-list** | defect_list.md·README 결함 체크·회귀 확인 | ✅ |
 | **05** | **dual-track-red-tests** | Track A/B RED 12 TC·계약 헤더·링크 RED | ✅ |
 | **06** | **track-b-green-tc-b-01** | `UnitConverter` meter→feet GREEN·TC-B-01 PASS | ✅ |
+| **07** | **dual-track-green-complete** | Track A/B 12 TC GREEN·ctest 6/6·9 feat 커밋 | ✅ |
+
+---
+
+## Step 07 상세 (2026-05-21)
+
+**User:** 커밋 순서표 2~9번 — Dual-Track 교차 GREEN(TC별 최소 구현·커밋) 반복 `진행` → [P] Report/Prompt Export·push.
+
+**Assistant:**
+- Track A: `ConversionUseCase`·`OutputFormatter` — 검증(TC-A-02~04)·happy/JSON/SRC-LOCK(TC-A-01,05,06)
+- Track B: `UnitConverter` 확장 — yard·역변환·convertAll·registerUnit·`loadConfig` fallback
+- CMake: `unit_control`, `OutputFormatter.cpp`
+- **9 feat(green) 커밋** (`35a3570`~`86bcc09`, Step 06 포함)
+
+**검증:** build ✅ · ctest **6/6 PASS** · `[track-a]` 6 TC · `[track-b]` 6 TC
+
+**다음:** REFACTOR(`UnitConverter`→Engine 위임)·ErrorPresenter·README/defect_list·커버리지·`green`→`main` PR.
 
 ---
 
@@ -134,5 +151,6 @@ docs/PRD.md
 | 04 | `Report/04.red-defect-list-report-2026-05-21.md` | `Prompt/04.red-defect-list-transcript-2026-05-21_prompt.md` |
 | 05 | `Report/05.dual-track-red-tests-report-2026-05-21.md` | `Prompt/05.dual-track-red-tests-transcript-2026-05-21_prompt.md` |
 | 06 | `Report/06.track-b-green-tc-b-01-report-2026-05-21.md` | `Prompt/06.track-b-green-tc-b-01-transcript-2026-05-21_prompt.md` |
+| 07 | `Report/07.dual-track-green-complete-report-2026-05-21.md` | `Prompt/07.dual-track-green-complete-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
