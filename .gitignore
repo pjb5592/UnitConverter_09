@@ -1,0 +1,10 @@
+build/
+build-cov/
+tests/golden_master/work/
+golden_input_*
+golden_output_*
+*.gcov
+*.gcda
+*.gcno
+coverage.info
+coverage.filtered.info

@@ -1,0 +1,259 @@
+################################################################################
+project:
+  name: unit_converter_Cpp
+  language: cpp
+  standard: c++17
+  build: cmake
+  test_framework: catch2
+  description: >
+    길이 단위 변환 CLI. meter 기준 환산, 동적 단위 등록,
+    설정 외부화(JSON), 출력 포맷(table/json/csv). BCE + TDD.
+
+################################################################################
+code_style:
+  formatter: clang-format
+  formatter_style: LLVM
+  indent: 4
+  column_limit: 100
+  naming:
+    type_class: PascalCase
+    function_method: camelCase
+    variable: camelCase
+    constant: kPascalCase
+    namespace: lower_snake
+    file: PascalCase
+  header_source_split:
+    principle: declaration in .hpp, definition in .cpp
+    exceptions:
+      - templates and constexpr requiring ODR-use in headers
+      - small value types (<= 3 methods) may stay header-only with ADR comment
+  include_order:
+    - corresponding_header
+    - c_stdlib
+    - cpp_stdlib
+    - third_party
+    - project
+  rules:
+    - "Prefer const, explicit constructors, override/final"
+    - "No using namespace std in headers"
+    - "Use std::optional or Result type for domain failures; avoid bool+out-param"
+    - "Smart pointers only at boundaries; domain value objects by value"
+
+################################################################################
+architecture:
+  pattern: boundary_control_entity
+  layers:
+    entity:
+      alias: domain
+      responsibility: >
+        UnitCatalog, LengthAmount, ConversionEngine, invariants, pure conversion.
+        No I/O, no format strings, no filesystem.
+      path: src/entity/
+    control:
+      responsibility: >
+        Use-case orchestration only. Calls entity + ports; no parsing, no formatting.
+      path: src/control/
+    boundary:
+      responsibility: >
+        CLI entry, InputParser, OutputFormatter(Table/Json/Csv), ErrorPresenter.
+      path: src/boundary/
+    data:
+      responsibility: >
+        IUnitDefinitionRepository implementations (InMemory, File JSON).
+      path: src/data/
+  dependency_direction:
+    allowed:
+      - boundary -> control
+      - control -> entity
+      - control -> data_ports
+      - data -> entity_types_only
+    forbidden:
+      - entity -> boundary
+      - entity -> data
+      - entity -> control
+      - data -> boundary
+  ports:
+    - IUnitDefinitionRepository
+  invariants_ref:
+    - INV-D01
+    - INV-D02
+    - INV-D03
+    - INV-D04
+    - INV-D05
+    - INV-D06
+    - INV-D07
+    - INV-D08
+
+################################################################################
+tdd_rules:
+  red_phase:
+    description: >
+      Catch2 테스트를 먼저 작성하고, Domain→Data→Boundary→Integration 순으로
+      실패(RED)를 확인한 뒤 최소 구현으로 넘어간다.
+    rules:
+      - "테스트 제목·시나리오는 BCE Traceability Matrix(DT/BT/DAT/IT)와 1:1 대응"
+      - "Domain TC를 최우선 RED: LengthAmount, UnitCatalog, LengthConversionEngine"
+      - "Invariant(INV-D01~D08)마다 최소 1개 실패 TC 존재 확인 후 구현 시작"
+      - "파싱·음수·미지원 단위·비율·동적 등록·출력(JSON/CSV/표) 분류별 RED 유지"
+      - "ε·반올림(1자리)·에러 문구 패턴은 테스트에 상수로 고정"
+      - "RED 단계에서 프로덕션 구현 파일 추가·기존 if-else 확장 금지"
+      - "Catch2 실행 결과: 신규 TC 전부 실패가 정상(GREEN 전제 없음)"
+    must_not:
+      - "테스트 없이 Domain/Business 로직 작성"
+      - "통합·E2E만 작성하고 Domain RED 생략"
+      - "가짜 통과(hard-coded return, mock이 전부 성공만 반환)"
+      - "README 요구를 테스트 ID 없이 구현"
+      - "여러 Invariant를 한 거대 TC에 묶어 실패 원인 불명확하게 만들기"
+
+  green_phase:
+    description: >
+      RED TC를 하나씩 GREEN으로 바꾸며, Domain 순수 로직→Data(Port)→Boundary 순으로
+      최소 코드만 추가한다. Control은 얇게 유지한다.
+    rules:
+      - "한 번에 1 TC(또는 동일 Invariant 묶음)만 GREEN; 전부 한꺼번에 X"
+      - "Domain: meter 기준 환산식만 구현; stdin/파일/JSON 문자열 Domain 유입 금지"
+      - "GREEN 후 즉시 Catch2 전체 재실행; 기존 TC 회귀 0"
+      - "비율 상수는 UnitDefinition/설정 단일 출처; main/Parser에 중복 상수 금지"
+      - "Boundary GREEN 시 Domain Mock 또는 실제 Domain 주입 명시"
+      - "Data GREEN: InMemory Repository 먼저, File(JSON)은 DAT-TC 통과 후"
+      - "에러 코드→고정 message 패턴 매핑은 ErrorPresenter 한 곳"
+    must_not:
+      - "GREEN을 위해 Invariant·ε·반올림 규칙 변경"
+      - "테스트 삭제·skip·DISABLE로 통과 처리"
+      - "if-else 단위 분기 누적로 OCP/SRP 우회"
+      - "Boundary에 환산 수식·factorToMeter 비즈니스 로직"
+      - "설정/동적 등록/출력 포맷을 RED 없이 일괄 구현"
+
+  refactor_phase:
+    description: >
+      해당 범위 TC가 전부 GREEN인 상태에서만 구조 개선한다.
+      리팩터 후 Catch2·커버리지 게이트로 행동 불변을 증명한다.
+    rules:
+      - "리팩터 전후 TC 목록·assertion·exit code 동일(MESSAGE-LOCK/ROUND-LOCK)"
+      - "SRP: Parser/Formatter/Repository/Engine/Catalog 분리; Control은 오케스트만"
+      - "OCP: 신규 단위·출력 포맷은 기존 Domain 수정 없이 확장 가능한지 TC로 확인"
+      - "중복 제거 후 Domain 라인 커버리지 ≥95%, Boundary ≥85%, Data ≥90%"
+      - "의존 방향: Boundary→Control→Domain←Data; Domain이 Boundary/Data include 금지"
+      - "리팩터 단위는 1 컴포넌트·1 책임; TC GREEN 유지하며 커밋 단위 축소"
+    must_not:
+      - "RED·GREEN 중 refactor (테스트 실패 상태에서 구조만 변경)"
+      - "공개 Domain API 시그니처 변경 without TC·계약 동시 갱신"
+      - "리팩터 중 신규 요구(기능) 추가"
+      - "테스트를 리팩터에 맞게 느슨하게 변경해 통과"
+      - "통합 테스트 제거로 Domain 커버리지만 충족"
+
+################################################################################
+testing:
+  framework: catch2
+  version_min: "3.0"
+  pattern: AAA
+  aaa_structure:
+    arrange: "Given catalog, input, format, config fixture"
+    act: "Invoke parser, use case, or formatter under test"
+    assert: "REQUIRE/CHECK numeric epsilon, exact strings, exit codes"
+  directories:
+    unit: tests/unit/
+    integration: tests/integration/
+  fixtures:
+    - name: DefaultUnitCatalogFixture
+      scope: "3 units meter/feet/yard with INV-D08 factors"
+    - name: EmptyCatalogFixture
+      scope: INV-D05 edge
+    - name: TempConfigFileFixture
+      scope: data layer JSON load
+    - name: CaptureStdoutStderrFixture
+      scope: boundary output and error JSON
+  rules:
+    - "One logical assertion theme per TEST_CASE; use SECTION for variants"
+    - "TEST_CASE name: Layer_Scenario_ExpectedOutcome"
+    - "Domain tests: no filesystem, no stdin; inject catalog by value"
+    - "Boundary tests: mock IUnitDefinitionRepository or stub catalog"
+    - "Integration tests: minimal IT-01~08 from traceability matrix"
+    - "Floating compare: REQUIRE_THAT with Catch::Matchers::WithinAbs(epsilon)"
+  coverage:
+    tool: gcov/lcov or llvm-cov
+    line_targets:
+      entity: 95
+      boundary: 85
+      data: 90
+      control: 80
+      overall: 88
+    gate: "Do not merge if any layer below target after GREEN scope"
+
+################################################################################
+forbidden:
+  - id: F01
+    pattern: "std::cout / std::cerr for debug tracing in entity/ or control/"
+    reason: "Pollutes Boundary contract tests and hides structured ErrorPresenter"
+    alternative: "Return DomainError; Boundary formats message; tests use CaptureStdoutStderrFixture"
+  - id: F02
+    pattern: "Literal conversion factors (3.28084, 1.09361) outside config/UnitDefinition"
+    reason: "Violates INV-D08 single source and OCP for new units"
+    alternative: "Load from units.json via IUnitDefinitionRepository; test with fixture file"
+  - id: F03
+    pattern: "catch (...) { } or catch (...) without rethrow/log mapping"
+    reason: "Swallows parse and domain failures; breaks ERR-* contract tests"
+    alternative: "Catch std::exception& at boundary only; map to ERR-PARSE-* / ERR-DOMAIN-*"
+  - id: F04
+    pattern: "Non-template function definitions in .hpp included by multiple TUs"
+    reason: "ODR violations and hidden dependencies in headers"
+    alternative: "Declare in .hpp, define in .cpp; templates stay in *_impl.hpp if needed"
+  - id: F05
+    pattern: "Global mutable catalog, format flags, or unit tables"
+    reason: "Race-prone, untestable order, breaks injectable Control"
+    alternative: "Pass UnitCatalog by const ref through use cases; main wires dependencies once"
+  - id: F06
+    pattern: "if (unit == \"feet\") chains for conversion in main or parser"
+    reason: "Breaks OCP; each new unit edits multiple sites"
+    alternative: "UnitCatalog + LengthConversionEngine loop over registered definitions"
+  - id: F07
+    pattern: "#include boundary/ or data/ headers from entity/"
+    reason: "Reverses dependency direction; couples domain to I/O"
+    alternative: "Entity includes only standard library and entity headers"
+
+################################################################################
+file_structure:
+  tree: |
+    project_root/
+    ├── .cursorrules
+    ├── CMakeLists.txt
+    ├── config/
+    │   └── units.json              # default factors (INV-D08)
+    ├── src/
+    │   ├── main.cpp                # wire boundary + control + repos
+    │   ├── entity/                 # domain: catalog, engine, value types
+    │   ├── control/                # use cases: convert, register
+    │   ├── boundary/               # parser, formatters, error presenter, entry
+    │   └── data/                   # file + in-memory repositories
+    └── tests/
+        ├── unit/
+        │   ├── entity/
+        │   ├── control/
+        │   ├── boundary/
+        │   └── data/
+        └── integration/
+  rules:
+    - "One public class or cohesive module pair (.hpp/.cpp) per file"
+    - "Tests mirror src layer paths under tests/unit/"
+    - "No production code under tests/ except helpers/fakes"
+
+################################################################################
+ai_behavior:
+  principles:
+    - "Tests before production code (RED → GREEN → REFACTOR)"
+    - "Never violate layer dependency_direction"
+    - "Refactor only when all affected Catch2 tests are GREEN"
+  must:
+    - "Read architecture.dependency_direction before adding includes"
+    - "Add or extend Catch2 TEST_CASE before implementing new behavior"
+    - "Place conversion math only in entity/; parsing only in boundary/"
+    - "Run full Catch2 suite after each GREEN increment"
+    - "Map errors through ErrorPresenter; use forbidden list as checklist"
+  must_not:
+    - "Implement features while prior RED tests still failing"
+    - "Refactor during RED or partial-GREEN phases"
+    - "Add entity → boundary/data includes to satisfy convenience"
+    - "Skip tests, weaken assertions, or disable cases to pass CI"
+    - "Introduce forbidden patterns (F01~F07) even as temporary debug"
+  when_uncertain:
+    - "Default to entity unit test RED with smallest public API change"
