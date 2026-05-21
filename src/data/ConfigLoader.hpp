@@ -13,6 +13,8 @@ public:
 
 class ConfigLoader {
 public:
+    static entity::UnitCatalog loadConfig(const std::string& path);
+
     static entity::UnitCatalog loadFromJson(const std::string& path);
     static entity::UnitCatalog loadFromYaml(const std::string& path);
     static entity::UnitCatalog loadWithDefaultsOnMissing(const std::string& path);

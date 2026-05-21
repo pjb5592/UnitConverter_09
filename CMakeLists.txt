@@ -46,6 +46,8 @@ add_unit_test(unit_conversion_tests tests/unit/entity/conversion_tests.cpp)
 add_unit_test(unit_boundary_tests tests/unit/boundary/parser_tests.cpp)
 add_unit_test(unit_catalog_tests tests/unit/entity/catalog_registration_tests.cpp)
 add_unit_test(unit_config_tests tests/unit/data/config_loader_tests.cpp)
+add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
+add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
 add_executable(unit_converter src/main.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary)

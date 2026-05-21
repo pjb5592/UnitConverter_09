@@ -18,6 +18,23 @@
 | **02** | **dev-strategy-branch-test-sample** | Git 브랜치 전략·테스트 플랜 샘플(AC-02) | ✅ |
 | **03** | **catch2-bce-tests-green** | test_plan·BCE·Catch2 36 TC·ctest GREEN | ✅ |
 | **04** | **red-defect-list** | defect_list.md·README 결함 체크·회귀 확인 | ✅ |
+| **05** | **dual-track-red-tests** | Track A/B RED 12 TC·계약 헤더·링크 RED | ✅ |
+
+---
+
+## Step 05 상세 (2026-05-21)
+
+**User:** Dual-Track RED 전용 — Track A(UI) 6건 + Track B(Logic) 6건; 구현/GREEN/REFACTOR 금지; 6자리 출력·`invalid_argument` 계약.
+
+**Assistant:**
+- `ui_track_red_tests.cpp` — `ConversionUseCase` (TC-A-01~06, INV-UI-01~06)
+- `logic_track_red_tests.cpp` — `UnitConverter`·`loadConfig` (TC-B-01~06, INV-D01~05)
+- 선언만: `ConversionUseCase.hpp`, `OutputFormatter.hpp`, `UnitConverter.hpp`, `loadConfig()`
+- CMake RED 스위트 2개; **링크 RED** (undefined reference)
+
+**검증:** build ⚠️ RED 2타깃 링크 실패 · ctest 4/6 PASS(기존 GREEN) · CLI ✅
+
+**다음:** GREEN Logic(`UnitConverter`·`loadConfig`) → GREEN UI(`ConversionUseCase`) → PRD ROUND vs 6자리 LOCK 정합.
 
 ---
 
@@ -97,5 +114,6 @@ docs/PRD.md
 | 02 | `Report/02.dev-strategy-branch-test-sample-report-2026-05-21.md` | `Prompt/02.dev-strategy-branch-test-sample-transcript-2026-05-21_prompt.md` |
 | 03 | `Report/03.catch2-bce-tests-green-report-2026-05-21.md` | `Prompt/03.catch2-bce-tests-green-transcript-2026-05-21_prompt.md` |
 | 04 | `Report/04.red-defect-list-report-2026-05-21.md` | `Prompt/04.red-defect-list-transcript-2026-05-21_prompt.md` |
+| 05 | `Report/05.dual-track-red-tests-report-2026-05-21.md` | `Prompt/05.dual-track-red-tests-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
