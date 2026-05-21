@@ -16,6 +16,7 @@ FetchContent_MakeAvailable(Catch2)
 add_library(unit_entity
     src/entity/UnitDefinition.cpp
     src/entity/UnitCatalog.cpp
+    src/entity/UnitCatalogJson.cpp
     src/entity/LengthConversionEngine.cpp
     src/entity/DisplayRounder.cpp
     src/entity/UnitConverter.cpp

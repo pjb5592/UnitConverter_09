@@ -21,6 +21,27 @@
 | **05** | **dual-track-red-tests** | Track A/B RED 12 TC·계약 헤더·링크 RED | ✅ |
 | **06** | **track-b-green-tc-b-01** | `UnitConverter` meter→feet GREEN·TC-B-01 PASS | ✅ |
 | **07** | **dual-track-green-complete** | Track A/B 12 TC GREEN·ctest 6/6·9 feat 커밋 | ✅ |
+| **08** | **refactor-coverage-f02-gate** | F02·Engine 위임·Domain 96.3%·Boundary 94.6% | ✅ |
+
+---
+
+## Step 08 상세 (2026-05-21)
+
+**User:** TC-A/B 전체·ctest·lcov 게이트( Domain ≥95% · Boundary ≥85% · F02 · main 분리) 점검.
+
+**Assistant (점검):** ctest 6/6·TC 전부 PASS. Domain **89%**·F02 **미달** (`LengthConversionRatios`, `withDefaultUnits` 리터럴). Boundary·`src/main.cpp` OK.
+
+**User:** `진행`
+
+**Assistant (REFACTOR):**
+- `UnitCatalogJson` — `config/units.json` 단일 출처
+- `UnitConverter` → `LengthConversionEngine` 위임; `LengthConversionRatios.hpp` 삭제
+- `ConfigLoader` JSON 파서 entity 위임; 레거시 `UnitConverter.cpp` 스텁
+- 커버리지 테스트: DisplayRounder 비유한수, `factorOf` unknown
+
+**검증:** build ✅ · ctest **6/6** · Domain **96.3%** · Boundary **94.6%** · `src` 리터럴 0건
+
+**다음:** ErrorPresenter · README/defect_list · IT · `green`→`main` PR.
 
 ---
 
@@ -152,5 +173,6 @@ docs/PRD.md
 | 05 | `Report/05.dual-track-red-tests-report-2026-05-21.md` | `Prompt/05.dual-track-red-tests-transcript-2026-05-21_prompt.md` |
 | 06 | `Report/06.track-b-green-tc-b-01-report-2026-05-21.md` | `Prompt/06.track-b-green-tc-b-01-transcript-2026-05-21_prompt.md` |
 | 07 | `Report/07.dual-track-green-complete-report-2026-05-21.md` | `Prompt/07.dual-track-green-complete-transcript-2026-05-21_prompt.md` |
+| 08 | `Report/08.refactor-coverage-f02-gate-report-2026-05-21.md` | `Prompt/08.refactor-coverage-f02-gate-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).

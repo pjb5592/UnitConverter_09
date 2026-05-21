@@ -1,5 +1,7 @@
 #include "data/ConfigLoader.hpp"
 
+#include "entity/UnitCatalogJson.hpp"
+
 #include <fstream>
 #include <regex>
 #include <sstream>
@@ -18,30 +20,12 @@ std::string readFile(const std::string& path) {
     return buffer.str();
 }
 
-void addUnit(entity::UnitCatalog& catalog, const std::string& name, double factor) {
-    if (factor <= 0.0) {
-        throw ConfigLoadError("invalid factor in config");
-    }
-    try {
-        catalog.registerUnit(name, factor);
-    } catch (const std::invalid_argument&) {
-        throw ConfigLoadError("invalid unit entry in config");
-    }
-}
-
 entity::UnitCatalog parseUnitsPayload(const std::string& content) {
-    entity::UnitCatalog catalog = entity::UnitCatalog::empty();
-    static const std::regex entryRegex(
-        R"re("name"\s*:\s*"([a-z][a-z0-9_]*)"\s*,\s*"factorToMeter"\s*:\s*([-+0-9.eE]+))re");
-    const auto begin = std::sregex_iterator(content.begin(), content.end(), entryRegex);
-    const auto end = std::sregex_iterator();
-    for (auto it = begin; it != end; ++it) {
-        addUnit(catalog, (*it)[1].str(), std::stod((*it)[2].str()));
+    try {
+        return entity::loadCatalogFromJsonContent(content);
+    } catch (const entity::CatalogJsonError& ex) {
+        throw ConfigLoadError(ex.what());
     }
-    if (catalog.size() == 0) {
-        throw ConfigLoadError("no units found in config");
-    }
-    return catalog;
 }
 
 }  // namespace
@@ -58,7 +42,11 @@ entity::UnitCatalog ConfigLoader::loadFromYaml(const std::string& path) {
     const auto end = std::sregex_iterator();
     entity::UnitCatalog catalog = entity::UnitCatalog::empty();
     for (auto it = begin; it != end; ++it) {
-        addUnit(catalog, (*it)[1].str(), std::stod((*it)[2].str()));
+        try {
+            catalog.registerUnit((*it)[1].str(), std::stod((*it)[2].str()));
+        } catch (const std::invalid_argument&) {
+            throw ConfigLoadError("invalid unit entry in yaml config");
+        }
     }
     if (catalog.size() == 0) {
         throw ConfigLoadError("no units found in yaml config");

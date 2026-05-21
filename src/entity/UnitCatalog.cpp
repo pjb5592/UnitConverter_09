@@ -1,5 +1,7 @@
 #include "entity/UnitCatalog.hpp"
 
+#include "entity/UnitCatalogJson.hpp"
+
 #include <algorithm>
 
 namespace entity {
@@ -39,11 +41,7 @@ std::size_t UnitCatalog::size() const {
 }
 
 UnitCatalog UnitCatalog::withDefaultUnits() {
-    UnitCatalog catalog;
-    catalog.registerUnit("meter", 1.0);
-    catalog.registerUnit("feet", 3.28084);
-    catalog.registerUnit("yard", 1.09361);
-    return catalog;
+    return loadCatalogFromJsonFile(resolveDefaultUnitsJsonPath());
 }
 
 UnitCatalog UnitCatalog::empty() {

@@ -85,6 +85,14 @@ TEST_CASE("test_register_dynamic_mile_then_convert_to_feet", "[register][dynamic
                              .margin(test_constants::kEpsilonRelaxed));
 }
 
+TEST_CASE("test_catalog_factor_of_unknown_unit_throws", "[register][dynamic]") {
+    // Given: default catalog from config/units.json
+    const entity::UnitCatalog catalog = entity::UnitCatalog::withDefaultUnits();
+
+    // When / Then
+    REQUIRE_THROWS_AS(catalog.factorOf("parsec"), std::invalid_argument);
+}
+
 TEST_CASE("test_register_dynamic_has_unit_query", "[register][dynamic]") {
     // Given: cubit registered
     entity::UnitCatalog catalog = entity::UnitCatalog::withDefaultUnits();
