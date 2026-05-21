@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `refactoring` (Step 14 커버리지·Invariant 감사)
+**브랜치:** `refactoring` (Step 15 Phase 6 종합 Export)
 
 ---
 
@@ -28,6 +28,28 @@
 | **12** | **pre-refactor-test-gap-analysis** | R-01~R-14·스멜·ECB·리팩터 계획·T-01~T-08 | ✅ |
 | **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
 | **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
+| **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
+
+---
+
+## Step 15 상세 (2026-05-21)
+
+**User:** 지금까지 작업 Report Export — 9섹션(개요·To-Do·RED/GREEN/REFACTOR·커버리지·미완료·이슈·AI 회고). 파일명 `YYMMDDn_UnitConverter_C++_*`.
+
+**Assistant:**
+- Report 01~14·git·ctest·lcov·TODO·refactoring_plan 수집.
+- **`Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`** — 상세 종합 (RED 14 TC·GREEN 9커밋·REFACTOR 13커밋·TD 표·DEF·AI 팁).
+- **ctest 9/9**, lcov 게이트 PASS (Step 14 수치).
+
+**User:** [P] 문서·배포 — Step 15 Report/Prompt/full-transcript·git push.
+
+**Assistant:**
+- **`Report/15.phase6-dualtrack-summary-report-2026-05-21.md`** — Step 표준 요약.
+- Transcript·full-transcript 갱신 · commit·push.
+
+**검증:** build(기존) ✅ · ctest 9/9 ✅ · 코드 변경 없음.
+
+**다음:** `refactoring`→`main` PR · TODO 체크 동기화 · Step 14 테스트 제안.
 
 ---
 
@@ -278,5 +300,8 @@ docs/PRD.md
 | 12 | `Report/12.pre-refactor-test-gap-analysis-report-2026-05-21.md` | `Prompt/12.pre-refactor-test-gap-analysis-transcript-2026-05-21_prompt.md` |
 | 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
 | 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
+| 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
+
+**Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
