@@ -1,0 +1,7 @@
+{
+  "units": [
+    { "name": "meter", "factorToMeter": 1.0 },
+    { "name": "feet", "factorToMeter": 3.28084 },
+    { "name": "yard", "factorToMeter": 1.09361 }
+  ]
+}

@@ -16,6 +16,24 @@
 | — | cursorrules | `.cursorrules` YAML | ✅ |
 | **01** | **docs-alignment-prd-readme** | PRD·README·TODO·traceability·갭 반영 | ✅ |
 | **02** | **dev-strategy-branch-test-sample** | Git 브랜치 전략·테스트 플랜 샘플(AC-02) | ✅ |
+| **03** | **catch2-bce-tests-green** | test_plan·BCE·Catch2 36 TC·ctest GREEN | ✅ |
+
+---
+
+## Step 03 상세 (2026-05-21)
+
+**User:** test_plan.md 작성 → README RED To-Do → Catch2 유형별 5+ 테스트·cmake Green → [P] Export/git.
+
+**Assistant:**
+- `docs/test_plan.md`, README RED 체크리스트
+- `CMakeLists.txt`, `src/` BCE, `tests/` 36 TEST_CASE
+- `config/units.json`, `.gitignore`
+- ctest 4/4 PASS; CLI `meter:2.5` PRD 3줄
+- Engine catalog 값 보관(세그폴트 수정)
+
+**검증:** build ✅ · ctest ✅ · 수동 stdout ✅
+
+**다음:** REFACTOR(ErrorPresenter)·IT·gcov 게이트·`green` 브랜치 merge.
 
 ---
 
@@ -26,23 +44,17 @@
 **Assistant:**
 - `main`/`spec`/`red`/`green`/`refactor` + `feat/red|green|refactor/{logic|ui}/TD-##`
 - 샘플: F-01·AC-02·G-03, 입력 `meter:2.5`, 출력 8.2 feet / 2.7 yard (ROUND-LOCK)
-- Report/02.*, Prompt/02.*, full-transcript 갱신
+- Report/02.*, Prompt/02.*
 
 **검증:** 문서·전략만; build/ctest N/A.
-
-**다음:** M0 TD-01 CMake+Catch2; `feat/red/logic`+`feat/red/ui`로 AC-02 RED.
 
 ---
 
 ## Step 01 상세 (2026-05-20)
 
-**User:** README vs PRD 검토 보고만 → 이후「모두 반영」코드 금지 → requirements.md 변경 취소 → [P] Report/Prompt/git.
+**User:** README vs PRD 검토 →「모두 반영」코드 금지 → requirements.md 복원 → [P] Export/git.
 
-**Assistant:**
-- PRD·README·TODO·traceability·gherkin 정합
-- 누락 To-Do(TD-16~18 등)·고아 To-Do 분류
-- requirements.md 레거시 복원
-- Report/01.*, Prompt Export
+**Assistant:** PRD·README·TODO·traceability·gherkin 정합; Report/01.*
 
 **검증:** 문서만; build/ctest N/A.
 
@@ -51,12 +63,10 @@
 ## 정본 문서 체인
 
 ```
-docs/requirements.md (레거시 초안)
-    → docs/PRD.md (요구 정본)
-    → README.md (사용자·Phase 6)
-    → docs/TODO.md + docs/traceability-matrix.md (실행)
-    → docs/gherkin.md (검증 시나리오)
-    → Step 02: 브랜치 전략·AC-02 샘플 (Prompt/Report Export)
+docs/PRD.md
+    → docs/test_plan.md (Step 03)
+    → README.md (+ RED To-Do)
+    → src/ + tests/ + config/units.json (인수 정본)
 ```
 
 ---
@@ -67,5 +77,6 @@ docs/requirements.md (레거시 초안)
 |------|--------|------------|
 | 01 | `Report/01.docs-alignment-prd-readme-report-2026-05-20.md` | `Prompt/01.docs-alignment-prd-readme-transcript-2026-05-20_prompt.md` |
 | 02 | `Report/02.dev-strategy-branch-test-sample-report-2026-05-21.md` | `Prompt/02.dev-strategy-branch-test-sample-transcript-2026-05-21_prompt.md` |
+| 03 | `Report/03.catch2-bce-tests-green-report-2026-05-21.md` | `Prompt/03.catch2-bce-tests-green-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
