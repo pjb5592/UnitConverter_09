@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** green
+**브랜치:** `refactoring` (Step 13 DoD 완료)
 
 ---
 
@@ -26,6 +26,22 @@
 | **10** | **golden-master-gm-tc** | GM-TC-01~04·UnitConverter_test·GoldenMaster ctest | ✅ |
 | **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
 | **12** | **pre-refactor-test-gap-analysis** | R-01~R-14·스멜·ECB·리팩터 계획·T-01~T-08 | ✅ |
+| **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
+
+---
+
+## Step 13 상세 (2026-05-21)
+
+**User:** Dual-Track REFACTOR (`refactoring_plan.md`) — 커밋 단위, 계약·F02·테스트 유지. 반복 `진행`/`계속`/`커밋`. 마지막 [P] Report/Prompt Export.
+
+**Assistant:**
+- **12 REFACTOR 커밋:** R-07→R-02→T-04→ErrorPresenter→CliReader→Engine 마이그레이션→`UnitConverter` 제거→`CliApp`→R-01 dual contract→CliApp IT.
+- **DoD:** ctest **9/9**, GoldenMaster CRLF fix, F02 클린, `run_coverage_gate.ps1` (entity 95.7%).
+- **아키텍처:** `main` → `CliApp` only; Control `ConversionUseCase`; Entity `UnitCatalog`+`Engine`.
+
+**검증:** build ✅ · ctest 9/9 ✅ · lcov gate ✅ · 수동 `meter:2.5` → 8.2 feet / 2.7 yard (1자리).
+
+**다음:** `refactoring`→`main` PR · GM-07 CI · README TC 매핑.
 
 ---
 
@@ -242,5 +258,6 @@ docs/PRD.md
 | 10 | `Report/10.golden-master-gm-tc-report-2026-05-21.md` | `Prompt/10.golden-master-gm-tc-transcript-2026-05-21_prompt.md` |
 | 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
 | 12 | `Report/12.pre-refactor-test-gap-analysis-report-2026-05-21.md` | `Prompt/12.pre-refactor-test-gap-analysis-transcript-2026-05-21_prompt.md` |
+| 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
