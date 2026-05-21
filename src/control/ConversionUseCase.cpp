@@ -1,15 +1,13 @@
 #include "control/ConversionUseCase.hpp"
 
-#include <stdexcept>
+#include "boundary/InputParser.hpp"
 
 namespace control {
 
 ConversionUseCase::ConversionUseCase(const entity::UnitCatalog& catalog) : catalog_(catalog) {}
 
 std::vector<std::string> ConversionUseCase::convertTable(const std::string& line) const {
-    if (line.find(':') == std::string::npos) {
-        throw std::invalid_argument("invalid format");
-    }
+    boundary::InputParser::parse(line);
     (void)catalog_;
     return {};
 }
