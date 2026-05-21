@@ -18,7 +18,6 @@ add_library(unit_entity
     src/entity/UnitCatalogJson.cpp
     src/entity/LengthConversionEngine.cpp
     src/entity/DisplayRounder.cpp
-    src/entity/UnitConverter.cpp
 )
 target_include_directories(unit_entity PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
