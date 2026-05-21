@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `feature/new_feature` (Step 16 Bonus DecayingUnit RED)
+**브랜치:** `feature/new_feature` (Step 17 Bonus DecayingUnit GREEN)
 
 ---
 
@@ -30,6 +30,25 @@
 | **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
 | **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
 | **16** | **bonus-decaying-unit-red** | DecayingUnit RED BT-01~06·`unit_decaying_tests` FAIL | 🔴 RED |
+| **17** | **bonus-decaying-unit-green** | OCP registry GREEN·BT-01~06 PASS·ctest 10/10 | ✅ GREEN |
+
+---
+
+## Step 17 상세 (2026-05-21)
+
+**User:** TDD GREEN만 — OCP `registerUnit`·meter 허브·`Item`/`UnitConverter.cpp` 수정 금지·BT-01~06·회귀 10/10·커밋 `feat(feature): add registerUnit with OCP registry`.
+
+**Assistant:**
+- RED 확인: `unit_decaying_tests` 6 fail (스텁)
+- `src/DecayingUnit.cpp` — `registerUnit` push + ratio 검증; `convert`/`convertAll` 레지스트리 조회·허브 변환
+- GREEN: ctest **10/10** · 기존 TC-A/B·GoldenMaster PASS
+- **커밋:** `72fae4d` feat(feature): add registerUnit with OCP registry
+
+**User:** [P] 문서·배포 — Step 17 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 17 · Transcript 17 · full-transcript 갱신 · commit·push.
+
+**다음:** REFACTOR(선택)·README bonus 체크·PR.
 
 ---
 
@@ -322,6 +341,7 @@ docs/PRD.md
 | 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
 | 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
 | 16 | `Report/16.bonus-decaying-unit-red-report-2026-05-21.md` | `Prompt/16.bonus-decaying-unit-red-transcript-2026-05-21_prompt.md` |
+| 17 | `Report/17.bonus-decaying-unit-green-report-2026-05-21.md` | `Prompt/17.bonus-decaying-unit-green-transcript-2026-05-21_prompt.md` |
 
 **Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 
