@@ -11,6 +11,8 @@ namespace {
 
 constexpr std::size_t kMinFractionalDigitsForSixDigitDisplay = 5;
 constexpr std::size_t kSixDigitDisplayFractionalWidth = 6;
+constexpr int kTableTargetPrecision = 6;
+constexpr int kJsonTargetPrecision = 6;
 
 }  // namespace
 
@@ -35,7 +37,8 @@ std::string OutputFormatter::formatTableLine(const std::string& sourceValueText,
                                              const std::string& targetUnit) {
     std::ostringstream line;
     line << sourceValueText << ' ' << sourceUnit << " = ";
-    line << std::fixed << std::setprecision(6) << targetValue << ' ' << targetUnit;
+    line << std::fixed << std::setprecision(kTableTargetPrecision) << targetValue << ' '
+         << targetUnit;
     return line.str();
 }
 
@@ -60,7 +63,7 @@ std::string OutputFormatter::formatJson(const std::string& sourceUnit,
             json << ',';
         }
         json << R"({"unit":")" << conversions[i].targetUnit << R"(","value":)" << std::fixed
-             << std::setprecision(6) << conversions[i].targetValue << '}';
+             << std::setprecision(kJsonTargetPrecision) << conversions[i].targetValue << '}';
     }
     json << "]}";
     return json.str();

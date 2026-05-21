@@ -18,6 +18,19 @@ control::ConversionUseCase makeUseCase() {
 
 }  // namespace
 
+// T-01 — convertDisplayTable 1-decimal contract (R-01 CLI/Golden Master path)
+// Scenario: meter:2.5 display lines match golden_master_expected.txt section
+// Invariant: INV-UI-07 display table uses roundOneDecimal; distinct from 6-digit convertTable
+TEST_CASE("T-01_convert_display_table_matches_golden_master_lines", "[red][track-a][T-01][display]") {
+    const control::ConversionUseCase useCase = makeUseCase();
+    const std::vector<std::string> lines = useCase.convertDisplayTable("meter:2.5");
+
+    REQUIRE(lines.size() == 3);
+    REQUIRE(lines[0] == "2.5 meter = 2.5 meter");
+    REQUIRE(lines[1] == "2.5 meter = 8.2 feet");
+    REQUIRE(lines[2] == "2.5 meter = 2.7 yard");
+}
+
 // TC-A-01 — Happy Path: meter:2.5 → 변환 결과(표 형식) 반환
 // Contract: 입력 파싱 후 최소 1줄 이상; feet 줄은 "2.5 meter = 8.202100 feet"
 // Invariant: INV-UI-01 정상 입력은 std::invalid_argument 없이 결과 벡터 비어 있지 않음

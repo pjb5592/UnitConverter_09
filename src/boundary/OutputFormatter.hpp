@@ -5,6 +5,9 @@
 
 namespace boundary {
 
+// R-01 dual contract: formatTableLine/formatJson use kTableTargetPrecision (6);
+// formatDisplayTableLine uses entity::roundOneDecimal (1) for CLI/Golden Master.
+
 struct ConversionRow {
     std::string targetUnit;
     double targetValue{0.0};
