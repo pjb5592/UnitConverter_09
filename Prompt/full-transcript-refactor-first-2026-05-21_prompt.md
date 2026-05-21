@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `refactoring` (Step 15 Phase 6 종합 Export)
+**브랜치:** `feature/new_feature` (Step 18 인수 검증 게이트)
 
 ---
 
@@ -29,6 +29,64 @@
 | **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
 | **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
 | **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
+| **16** | **bonus-decaying-unit-red** | DecayingUnit RED BT-01~06·`unit_decaying_tests` FAIL | 🔴 RED |
+| **17** | **bonus-decaying-unit-green** | OCP registry GREEN·BT-01~06 PASS·ctest 10/10 | ✅ GREEN |
+| **18** | **feature-verification-dod-gate** | ctest 10/10·GM·TC-A/B·lcov PASS·F02(DecayingUnit) 주의·PR 권고 | ✅ 검증 |
+
+---
+
+## Step 18 상세 (2026-05-21)
+
+**User:** 신규 기능 완료 후 전체 테스트·커버리지·Golden Master·BT/TC-A/B·음수 registerUnit·Domain≥95%/Boundary≥85% 확인. 이후 `feature/new_feature`→`B_09` PR·`main`·`v1.0.0`.
+
+**Assistant:**
+- `cmake` build · `ctest -V` — **10/10 PASS** (decaying + GoldenMaster)
+- `run_coverage_gate.ps1` — entity **95.7%** · boundary **94.8%** · ctest 10/10 · **F02 FAIL** (`DecayingUnit.cpp` 리터럴)
+- BT-01~06 `[bonus]` · TC-A-01~07 · TC-B-01~07 · GM meter/feet/yard — PASS
+- `gh` 미설치 — PR/태그 수동 권고
+
+**User:** [P] 문서·배포 — Step 18 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 18 · Transcript 18 · full-transcript 갱신 · commit·push.
+
+**다음:** PR `feature/new_feature`→`B_09` · F02 REFACTOR(선택) · `v1.0.0`.
+
+---
+
+## Step 17 상세 (2026-05-21)
+
+**User:** TDD GREEN만 — OCP `registerUnit`·meter 허브·`Item`/`UnitConverter.cpp` 수정 금지·BT-01~06·회귀 10/10·커밋 `feat(feature): add registerUnit with OCP registry`.
+
+**Assistant:**
+- RED 확인: `unit_decaying_tests` 6 fail (스텁)
+- `src/DecayingUnit.cpp` — `registerUnit` push + ratio 검증; `convert`/`convertAll` 레지스트리 조회·허브 변환
+- GREEN: ctest **10/10** · 기존 TC-A/B·GoldenMaster PASS
+- **커밋:** `72fae4d` feat(feature): add registerUnit with OCP registry
+
+**User:** [P] 문서·배포 — Step 17 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 17 · Transcript 17 · full-transcript 갱신 · commit·push.
+
+**다음:** REFACTOR(선택)·README bonus 체크·PR.
+
+---
+
+## Step 16 상세 (2026-05-21)
+
+**User:** 신규 기능 RED — `registerUnit("cubit",0.4572)`·convert·convertAll·음수 예외·BT-01~06·`[bonus]`·구현 금지. 산출: `DecayingUnit.cpp` + `test_decaying_unit.cpp` 실패 상태.
+
+**Assistant:**
+- `src/DecayingUnit.hpp` · `src/DecayingUnit.cpp` (내부 `Item`, RED 스텁) · `tests/test_decaying_unit.cpp`
+- `CMakeLists.txt` — `unit_decaying` · `unit_decaying_tests`
+- `UnitConverter.cpp` 미수정
+
+**검증:** build ✅ · `unit_decaying_tests` 6 assertions FAIL (RED) · ctest **9/10** (기존 9 PASS)
+
+**User:** [P] 문서·배포 — Step 16 Report/Prompt/full-transcript·git push.
+
+**Assistant:** Report 16 · Transcript 16 · full-transcript 갱신 · commit·push.
+
+**다음:** GREEN `DecayingUnit` 구현 → ctest 10/10.
 
 ---
 
@@ -301,6 +359,9 @@ docs/PRD.md
 | 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
 | 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
 | 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
+| 16 | `Report/16.bonus-decaying-unit-red-report-2026-05-21.md` | `Prompt/16.bonus-decaying-unit-red-transcript-2026-05-21_prompt.md` |
+| 17 | `Report/17.bonus-decaying-unit-green-report-2026-05-21.md` | `Prompt/17.bonus-decaying-unit-green-transcript-2026-05-21_prompt.md` |
+| 18 | `Report/18.feature-verification-dod-gate-report-2026-05-21.md` | `Prompt/18.feature-verification-dod-gate-transcript-2026-05-21_prompt.md` |
 
 **Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 

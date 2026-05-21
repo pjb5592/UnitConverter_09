@@ -1,4 +1,5 @@
 build/
+build-cov/
 tests/golden_master/work/
 golden_input_*
 golden_output_*
