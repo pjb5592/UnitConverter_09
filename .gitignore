@@ -1,4 +1,7 @@
 build/
+tests/golden_master/work/
+golden_input_*
+golden_output_*
 *.gcov
 *.gcda
 *.gcno

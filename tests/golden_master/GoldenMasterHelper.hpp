@@ -4,6 +4,7 @@
 #include <cstring>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -12,12 +13,6 @@ namespace golden_master {
 
 inline constexpr const char* kPromptPrefix =
     "Insert value for converting (ex: meter:2.5): ";
-
-inline const std::vector<std::string>& scenarios() {
-    static const std::vector<std::string> items = {"meter:2.5", "feet:1.0", "yard:1.0",
-                                                   "meter:0.0"};
-    return items;
-}
 
 inline std::string readFile(const std::filesystem::path& path) {
     std::ifstream in(path, std::ios::binary);
@@ -52,6 +47,31 @@ inline std::vector<std::string> splitLines(const std::string& text) {
     return lines;
 }
 
+inline std::string trimTrailingNewlines(std::string text) {
+    while (!text.empty() && (text.back() == '\n' || text.back() == '\r')) {
+        text.pop_back();
+    }
+    return text;
+}
+
+inline std::string extractSection(const std::string& baselineDocument,
+                                  const std::string& sectionHeader) {
+    const std::string marker = '[' + sectionHeader + ']';
+    const std::size_t start = baselineDocument.find(marker);
+    if (start == std::string::npos) {
+        return {};
+    }
+
+    std::size_t end = baselineDocument.find("\n---", start);
+    if (end == std::string::npos) {
+        end = baselineDocument.size();
+    } else {
+        ++end;  // skip leading '\n' of separator
+    }
+
+    return trimTrailingNewlines(baselineDocument.substr(start, end - start));
+}
+
 inline std::vector<std::string> extractConversionLines(const std::string& rawStdout) {
     std::vector<std::string> conversionLines;
     for (const std::string& line : splitLines(rawStdout)) {
@@ -70,86 +90,93 @@ inline std::vector<std::string> extractConversionLines(const std::string& rawStd
     return conversionLines;
 }
 
-inline std::string formatScenarioBlock(const std::string& scenarioInput,
-                                       const std::vector<std::string>& conversionLines) {
-    std::ostringstream block;
-    block << '[' << scenarioInput << "]\n";
+inline std::string formatSection(const std::string& scenarioInput,
+                                 const std::vector<std::string>& conversionLines) {
+    std::ostringstream section;
+    section << '[' << scenarioInput << "]\n";
     for (const std::string& line : conversionLines) {
-        block << line << '\n';
+        section << line << '\n';
     }
-    return block.str();
+    return trimTrailingNewlines(section.str());
 }
 
-inline std::string buildGoldenDocument(
-    const std::vector<std::pair<std::string, std::vector<std::string>>>& blocks) {
-    std::ostringstream document;
-    for (std::size_t i = 0; i < blocks.size(); ++i) {
-        document << formatScenarioBlock(blocks[i].first, blocks[i].second);
-        if (i + 1 < blocks.size()) {
-            document << "---\n";
-        }
-    }
-    return document.str();
+// stdout 리디렉션: UnitConverter < input.txt > actual.txt
+inline bool captureStdoutToFile(const std::string& exePath,
+                                const std::filesystem::path& inputPath,
+                                const std::filesystem::path& actualPath) {
+    std::string command = '"' + exePath + "\" < \"" + inputPath.string() + "\" > \"" +
+                          actualPath.string() + "\" 2>&1";
+#ifdef _WIN32
+    command = "cmd /c " + command;
+#endif
+    return std::system(command.c_str()) == 0;
 }
 
-inline std::string runConverterCapture(const std::string& exePath,
-                                       const std::string& scenarioInput,
-                                       const std::filesystem::path& workDir) {
-    const std::filesystem::path inputPath =
-        workDir / ("golden_input_" + scenarioInput + ".txt");
-    const std::filesystem::path outputPath =
-        workDir / ("golden_output_" + scenarioInput + ".txt");
+inline std::string captureScenarioSection(const std::string& exePath,
+                                          const std::string& scenarioInput,
+                                          const std::filesystem::path& workDir) {
+    const std::filesystem::path inputPath = workDir / "input.txt";
+    const std::filesystem::path actualPath = workDir / "actual.txt";
 
     if (!writeFile(inputPath, scenarioInput + "\n")) {
         return {};
     }
-
-    std::string command = '"' + exePath + "\" < \"" + inputPath.string() + "\" > \"" +
-                          outputPath.string() + "\" 2>&1";
-#ifdef _WIN32
-    command = "cmd /c " + command;
-#endif
-    const int exitCode = std::system(command.c_str());
-    if (exitCode != 0) {
+    if (!captureStdoutToFile(exePath, inputPath, actualPath)) {
         return {};
     }
-    return readFile(outputPath);
+
+    const std::string rawStdout = readFile(actualPath);
+    return formatSection(scenarioInput, extractConversionLines(rawStdout));
 }
 
-inline std::string captureAllScenarios(const std::string& exePath,
-                                       const std::filesystem::path& workDir) {
-    std::vector<std::pair<std::string, std::vector<std::string>>> blocks;
-    blocks.reserve(scenarios().size());
-    for (const std::string& scenario : scenarios()) {
-        const std::string rawStdout = runConverterCapture(exePath, scenario, workDir);
-        blocks.emplace_back(scenario, extractConversionLines(rawStdout));
-    }
-    return buildGoldenDocument(blocks);
-}
-
-inline std::string diffText(const std::string& expected, const std::string& actual) {
+inline std::string unifiedDiff(const std::string& expected, const std::string& actual) {
     const std::vector<std::string> expectedLines = splitLines(expected);
     const std::vector<std::string> actualLines = splitLines(actual);
+
+    std::ostringstream out;
+    out << "--- expected\n";
+    out << "+++ actual\n";
+
     const std::size_t maxLines =
         expectedLines.size() > actualLines.size() ? expectedLines.size() : actualLines.size();
+    if (maxLines > 0) {
+        out << "@@ -1," << expectedLines.size() << " +1," << actualLines.size() << " @@\n";
+    }
 
-    std::ostringstream diff;
-    bool hasDiff = false;
     for (std::size_t i = 0; i < maxLines; ++i) {
-        const std::string exp = i < expectedLines.size() ? expectedLines[i] : "<missing>";
-        const std::string act = i < actualLines.size() ? actualLines[i] : "<missing>";
-        if (exp != act) {
-            hasDiff = true;
-            diff << "L" << (i + 1) << " expected: " << exp << '\n';
-            diff << "L" << (i + 1) << "   actual: " << act << '\n';
+        const bool hasExp = i < expectedLines.size();
+        const bool hasAct = i < actualLines.size();
+        const std::string& exp = hasExp ? expectedLines[i] : std::string{};
+        const std::string& act = hasAct ? actualLines[i] : std::string{};
+
+        if (hasExp && hasAct && exp == act) {
+            out << ' ' << exp << '\n';
+        } else {
+            if (hasExp) {
+                out << '-' << exp << '\n';
+            }
+            if (hasAct) {
+                out << '+' << act << '\n';
+            }
         }
     }
-    if (!hasDiff && expected != actual) {
-        diff << "Trailing newline or whitespace mismatch.\n";
-        diff << "expected bytes: " << expected.size() << ", actual bytes: " << actual.size()
-             << '\n';
+
+    if (expectedLines.empty() && actualLines.empty() && expected != actual) {
+        out << "@@ trailing whitespace or byte mismatch @@\n";
+        out << "- (bytes=" << expected.size() << ")\n";
+        out << "+ (bytes=" << actual.size() << ")\n";
     }
-    return diff.str();
+
+    return out.str();
+}
+
+inline void assertSectionEquals(const std::string& expected, const std::string& actual,
+                                const std::string& testId) {
+    if (expected == actual) {
+        return;
+    }
+    std::cerr << "\n[" << testId << "] Golden Master mismatch\n";
+    std::cerr << unifiedDiff(expected, actual) << '\n';
 }
 
 }  // namespace golden_master
