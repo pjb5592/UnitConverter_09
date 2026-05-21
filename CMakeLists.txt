@@ -34,11 +34,17 @@ add_library(unit_boundary
 target_include_directories(unit_boundary PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(unit_boundary PUBLIC unit_entity)
 
+add_library(unit_control
+    src/control/ConversionUseCase.cpp
+)
+target_include_directories(unit_control PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(unit_control PUBLIC unit_entity unit_boundary)
+
 enable_testing()
 
 function(add_unit_test target_name source_file)
     add_executable(${target_name} ${source_file})
-    target_link_libraries(${target_name} PRIVATE unit_entity unit_data unit_boundary Catch2::Catch2WithMain)
+    target_link_libraries(${target_name} PRIVATE unit_entity unit_data unit_boundary unit_control Catch2::Catch2WithMain)
     target_include_directories(${target_name} PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/tests)
     add_test(NAME ${target_name} COMMAND ${target_name})
 endfunction()
@@ -51,4 +57,4 @@ add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
 add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
 add_executable(unit_converter src/main.cpp)
-target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary)
+target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
