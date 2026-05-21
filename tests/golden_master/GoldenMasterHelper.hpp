@@ -54,6 +54,24 @@ inline std::string trimTrailingNewlines(std::string text) {
     return text;
 }
 
+inline std::string normalizeLineEndings(std::string text) {
+    std::string normalized;
+    normalized.reserve(text.size());
+    for (std::size_t i = 0; i < text.size(); ++i) {
+        if (text[i] == '\r') {
+            if (i + 1 < text.size() && text[i + 1] == '\n') {
+                normalized.push_back('\n');
+                ++i;
+            } else {
+                normalized.push_back('\n');
+            }
+        } else {
+            normalized.push_back(text[i]);
+        }
+    }
+    return normalized;
+}
+
 inline std::string extractSection(const std::string& baselineDocument,
                                   const std::string& sectionHeader) {
     const std::string marker = '[' + sectionHeader + ']';
@@ -69,7 +87,8 @@ inline std::string extractSection(const std::string& baselineDocument,
         ++end;  // skip leading '\n' of separator
     }
 
-    return trimTrailingNewlines(baselineDocument.substr(start, end - start));
+    return normalizeLineEndings(
+        trimTrailingNewlines(baselineDocument.substr(start, end - start)));
 }
 
 inline std::vector<std::string> extractConversionLines(const std::string& rawStdout) {
@@ -172,11 +191,13 @@ inline std::string unifiedDiff(const std::string& expected, const std::string& a
 
 inline void assertSectionEquals(const std::string& expected, const std::string& actual,
                                 const std::string& testId) {
-    if (expected == actual) {
+    const std::string expectedNorm = normalizeLineEndings(expected);
+    const std::string actualNorm = normalizeLineEndings(actual);
+    if (expectedNorm == actualNorm) {
         return;
     }
     std::cerr << "\n[" << testId << "] Golden Master mismatch\n";
-    std::cerr << unifiedDiff(expected, actual) << '\n';
+    std::cerr << unifiedDiff(expectedNorm, actualNorm) << '\n';
 }
 
 }  // namespace golden_master

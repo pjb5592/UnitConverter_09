@@ -7,6 +7,40 @@ namespace boundary {
 
 namespace {
 
+struct UnitValueTokens {
+    std::string unit;
+    std::string valueToken;
+};
+
+UnitValueTokens splitUnitValueLine(const std::string& line) {
+    if (line.empty()) {
+        throw std::invalid_argument("empty input");
+    }
+
+    const std::size_t colon = line.find(':');
+    if (colon == std::string::npos) {
+        throw std::invalid_argument("invalid format");
+    }
+
+    return {line.substr(0, colon), line.substr(colon + 1)};
+}
+
+double parseNonNegativeValue(const std::string& valueToken) {
+    try {
+        std::size_t consumed = 0;
+        const double value = std::stod(valueToken, &consumed);
+        if (consumed != valueToken.size()) {
+            throw std::invalid_argument("invalid number");
+        }
+        if (value < 0.0) {
+            throw std::invalid_argument("negative length");
+        }
+        return value;
+    } catch (const std::exception&) {
+        throw std::invalid_argument("invalid number");
+    }
+}
+
 bool isValidUnitName(const std::string& unit) {
     if (unit.empty()) {
         return false;
@@ -26,37 +60,15 @@ bool isValidUnitName(const std::string& unit) {
 }  // namespace
 
 ParsedInput InputParser::parse(const std::string& line) {
-    if (line.empty()) {
-        throw std::invalid_argument("empty input");
-    }
+    const UnitValueTokens tokens = splitUnitValueLine(line);
 
-    const std::size_t colon = line.find(':');
-    if (colon == std::string::npos) {
-        throw std::invalid_argument("invalid format");
-    }
-
-    ParsedInput result;
-    result.unit = line.substr(0, colon);
-    const std::string valueToken = line.substr(colon + 1);
-
-    if (!isValidUnitName(result.unit)) {
+    if (!isValidUnitName(tokens.unit)) {
         throw std::invalid_argument("invalid unit name");
     }
 
-    try {
-        std::size_t consumed = 0;
-        result.value = std::stod(valueToken, &consumed);
-        if (consumed != valueToken.size()) {
-            throw std::invalid_argument("invalid number");
-        }
-    } catch (const std::exception&) {
-        throw std::invalid_argument("invalid number");
-    }
-
-    if (result.value < 0.0) {
-        throw std::invalid_argument("negative length");
-    }
-
+    ParsedInput result;
+    result.unit = tokens.unit;
+    result.value = parseNonNegativeValue(tokens.valueToken);
     return result;
 }
 

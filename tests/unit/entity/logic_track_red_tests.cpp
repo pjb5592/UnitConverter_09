@@ -71,6 +71,24 @@ TEST_CASE("TC-B-03_convert_all_returns_all_registered_units", "[red][track-b][TC
                                         .margin(test_constants::kEpsilonRelaxed));
 }
 
+// T-03 — registerUnit 후 convertAll이 동일 static catalog 사용 (R-07)
+// Scenario: registerUnit("fathom", 1.8288) → convertAll에 fathom 포함
+// Invariant: INV-D02 convert/convertAll/registerUnit 단일 카탈로그
+TEST_CASE("T-03_register_unit_then_convert_all_uses_shared_catalog", "[red][track-b][T-03]") {
+    entity::UnitConverter::registerUnit("fathom", 1.8288);
+
+    const auto rows = entity::UnitConverter::convertAll("fathom", 1.0);
+
+    bool foundFathom = false;
+    for (const auto& row : rows) {
+        if (row.first == "fathom") {
+            foundFathom = true;
+            REQUIRE(row.second == Approx(1.0).margin(test_constants::kEpsilonRelaxed));
+        }
+    }
+    REQUIRE(foundFathom);
+}
+
 // TC-B-04 — registerUnit(name, ratio_to_meter) 후 변환
 // Scenario: registerUnit("inch", 0.0254) — 1 inch = 0.0254 meter
 // Invariant: INV-D03 양수 ratio; 등록 직후 convert("inch",1,"meter")==0.0254

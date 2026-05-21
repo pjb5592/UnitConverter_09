@@ -21,8 +21,7 @@ double UnitConverter::convert(const std::string& fromUnit, double value, const s
 
 std::vector<std::pair<std::string, double>> UnitConverter::convertAll(const std::string& fromUnit,
                                                                       double value) {
-    const UnitCatalog defaults = UnitCatalog::withDefaultUnits();
-    const LengthConversionEngine engine(defaults);
+    const LengthConversionEngine engine(catalogState());
     return engine.convertAll(fromUnit, value);
 }
 
