@@ -19,6 +19,24 @@
 | **03** | **catch2-bce-tests-green** | test_plan·BCE·Catch2 36 TC·ctest GREEN | ✅ |
 | **04** | **red-defect-list** | defect_list.md·README 결함 체크·회귀 확인 | ✅ |
 | **05** | **dual-track-red-tests** | Track A/B RED 12 TC·계약 헤더·링크 RED | ✅ |
+| **06** | **track-b-green-tc-b-01** | `UnitConverter` meter→feet GREEN·TC-B-01 PASS | ✅ |
+
+---
+
+## Step 06 상세 (2026-05-21)
+
+**User:** TDD GREEN만 — TC-B-01 `convert("meter",2.5,"feet")` ≈ 8.20210 (ε 1e-5); 비율 상수화; REFACTOR·타 TC 금지.
+
+**Assistant:**
+- RED: `UnitConverter.cpp` 없음 → 링크 RED (`unit_logic_red_tests`)
+- `LengthConversionRatios.hpp` — `kFeetPerMeter`, `kYardPerMeter`
+- `UnitConverter.cpp` — meter→feet 분기만; `convertAll`/`registerUnit` 스텁
+- `ConfigLoader::loadConfig` 링크 스텁 (`empty()`)
+- CMake `unit_entity`에 `UnitConverter.cpp` 추가
+
+**검증:** build ⚠️ (ui RED 링크 실패) · ctest 4/6 PASS · `[TC-B-01]` ✅ · `[TC-B-02]` FAIL(의도)
+
+**다음:** TC-B-02 GREEN → 허브 위임 REFACTOR → Track A `ConversionUseCase` GREEN.
 
 ---
 
@@ -115,5 +133,6 @@ docs/PRD.md
 | 03 | `Report/03.catch2-bce-tests-green-report-2026-05-21.md` | `Prompt/03.catch2-bce-tests-green-transcript-2026-05-21_prompt.md` |
 | 04 | `Report/04.red-defect-list-report-2026-05-21.md` | `Prompt/04.red-defect-list-transcript-2026-05-21_prompt.md` |
 | 05 | `Report/05.dual-track-red-tests-report-2026-05-21.md` | `Prompt/05.dual-track-red-tests-transcript-2026-05-21_prompt.md` |
+| 06 | `Report/06.track-b-green-tc-b-01-report-2026-05-21.md` | `Prompt/06.track-b-green-tc-b-01-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
