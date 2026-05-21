@@ -25,6 +25,20 @@
 | **09** | **golden-master-approval-regression** | CLI stdout Golden Master·approve·ctest 7/7 | ✅ |
 | **10** | **golden-master-gm-tc** | GM-TC-01~04·UnitConverter_test·GoldenMaster ctest | ✅ |
 | **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
+| **12** | **pre-refactor-test-gap-analysis** | R-01~R-14·스멜·ECB·리팩터 계획·T-01~T-08 | ✅ |
+
+---
+
+## Step 12 상세 (2026-05-21)
+
+**User:** `src/` 테스트 갭·`UnitConverter`/`UnitDefinition`/`main` 등 파일별 `*_test(s).cpp` 분석 · 코드 스멜 표 · ECB 3문항 · 리팩터링 계획서(R-U/L, Phase, ctest) · 종합 정리 · [P] Report/Prompt Export.
+
+**Assistant:**
+- 코드 변경 없음. 산출: 테스트 매핑, R-01~R-14, 스멜 20항, ECB `main`→UseCase 권고, 리팩터 Phase 0~4.
+- R-01 블로커: GM 1자리 vs ui_track 6자리. R-L2/L3/L4는 구조상 이미 충족.
+- 검증: build ✅ · unit ctest 6/6 ✅ · GoldenMaster FAIL (CRLF/LF 의심, Windows).
+
+**다음:** R-01 결정 · T-03/T-04 RED · Phase 2 `main` 통합 · GM 줄바꿈·CI GM-07.
 
 ---
 
@@ -227,5 +241,6 @@ docs/PRD.md
 | 09 | `Report/09.golden-master-approval-report-2026-05-21.md` | `Prompt/09.golden-master-approval-transcript-2026-05-21_prompt.md` |
 | 10 | `Report/10.golden-master-gm-tc-report-2026-05-21.md` | `Prompt/10.golden-master-gm-tc-transcript-2026-05-21_prompt.md` |
 | 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
+| 12 | `Report/12.pre-refactor-test-gap-analysis-report-2026-05-21.md` | `Prompt/12.pre-refactor-test-gap-analysis-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
