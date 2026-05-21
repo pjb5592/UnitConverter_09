@@ -244,11 +244,11 @@ echo meter:2.5 | .\build\unit_converter.exe
 
 ### 6.7 Definition of Done
 
-- [ ] `ctest` 7/7 PASS (6 unit + GoldenMaster)
-- [ ] Phase 해당 T-01~T-08 PASS
-- [ ] F02 `src` grep 클린
-- [ ] README GM-09: REFACTOR 후 GM 재실행 ✅
-- [ ] (선택) lcov 게이트 미달 없음
+- [x] `ctest` 9/9 PASS (8 unit + `unit_cli_integration_tests` + GoldenMaster)
+- [x] Phase 해당 T-01~T-07 PASS (T-08 N/A — R-01 dual contract: ui 6자리 + CLI/GM 1자리)
+- [x] F02 `src` grep 클린
+- [x] README GM-09: REFACTOR 후 GM 재실행 ✅
+- [x] lcov 게이트 — `scripts/run_coverage_gate.ps1` (entity ≥95%, boundary ≥85%, data ≥90%, control ≥80%, src ≥88%)
 
 ---
 
