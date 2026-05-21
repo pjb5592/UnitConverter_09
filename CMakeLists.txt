@@ -30,6 +30,7 @@ target_link_libraries(unit_data PUBLIC unit_entity)
 
 add_library(unit_boundary
     src/boundary/InputParser.cpp
+    src/boundary/OutputFormatter.cpp
 )
 target_include_directories(unit_boundary PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(unit_boundary PUBLIC unit_entity)
