@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** `refactoring` (Step 13 DoD 완료)
+**브랜치:** `refactoring` (Step 14 커버리지·Invariant 감사)
 
 ---
 
@@ -27,6 +27,24 @@
 | **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
 | **12** | **pre-refactor-test-gap-analysis** | R-01~R-14·스멜·ECB·리팩터 계획·T-01~T-08 | ✅ |
 | **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
+| **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
+
+---
+
+## Step 14 상세 (2026-05-21)
+
+**User:** 커버리지 점검 — gcov/lcov, Invariant 분기(meter↔feet/yard, 음수, unknown unit), Domain≥95%/Boundary≥85% 미달 시 테스트 제안만(구현 금지). 표 출력.
+
+**Assistant:**
+- `run_coverage_gate.ps1` — ctest **9/9**, entity **95.7%**, boundary **94.8%**, F02 PASS.
+- `UnitConverter.cpp` 루트 스텁; 정본 `LengthConversionEngine.cpp`.
+- **Invariant:** 비율·unknown unit ✅; 음수 Parser ✅ / CliApp ❌; 엔진 L14 factor<=0 ❌ (dead path).
+- 파일별 Miss: Engine 2, UnitCatalogJson 3, InputParser 3, CliApp 2, OutputFormatter 1.
+- 코드 변경 없음; Catch2/IT 보강 제안만.
+
+**검증:** build-cov ✅ · ctest 9/9 ✅ · lcov gate ✅
+
+**다음:** 제안 테스트 RED→GREEN · PR · CI 게이트 연동.
 
 ---
 
@@ -259,5 +277,6 @@ docs/PRD.md
 | 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
 | 12 | `Report/12.pre-refactor-test-gap-analysis-report-2026-05-21.md` | `Prompt/12.pre-refactor-test-gap-analysis-transcript-2026-05-21_prompt.md` |
 | 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
+| 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
