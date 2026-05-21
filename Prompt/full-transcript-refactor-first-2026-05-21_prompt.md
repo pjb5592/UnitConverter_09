@@ -22,6 +22,26 @@
 | **06** | **track-b-green-tc-b-01** | `UnitConverter` meter→feet GREEN·TC-B-01 PASS | ✅ |
 | **07** | **dual-track-green-complete** | Track A/B 12 TC GREEN·ctest 6/6·9 feat 커밋 | ✅ |
 | **08** | **refactor-coverage-f02-gate** | F02·Engine 위임·Domain 96.3%·Boundary 94.6% | ✅ |
+| **09** | **golden-master-approval-regression** | CLI stdout Golden Master·approve·ctest 7/7 | ✅ |
+
+---
+
+## Step 09 상세 (2026-05-21)
+
+**User:** Golden Master(Approval) — 4시나리오 기준 파일·approve 패턴·생성 스크립트·한글 설명.
+
+**Assistant:**
+- `tests/golden_master_expected.txt` — `[입력]` 블록·`---` 구분·CLI ROUND-LOCK(1자리) 실측
+- `GoldenMasterHelper.hpp` — 캡처·diff·approve
+- `golden_master_tests.cpp` — 기준 없으면 생성, 있으면 비교·FAIL+diff
+- `scripts/generate_golden_master.ps1` / `.sh`
+- CMake `unit_golden_master_tests` (ctest #7)
+
+**User:** `커밋해줘` → **`b45f77a`** feat(test) golden master (6 files).
+
+**검증:** build ✅ · ctest **7/7 PASS** · approve 자동 생성 ✅ · 스크립트 재생성 ✅
+
+**다음:** `.gitignore` golden 잔여 · README 절차 · IT·Gherkin · `green`→`main` PR.
 
 ---
 
@@ -174,5 +194,6 @@ docs/PRD.md
 | 06 | `Report/06.track-b-green-tc-b-01-report-2026-05-21.md` | `Prompt/06.track-b-green-tc-b-01-transcript-2026-05-21_prompt.md` |
 | 07 | `Report/07.dual-track-green-complete-report-2026-05-21.md` | `Prompt/07.dual-track-green-complete-transcript-2026-05-21_prompt.md` |
 | 08 | `Report/08.refactor-coverage-f02-gate-report-2026-05-21.md` | `Prompt/08.refactor-coverage-f02-gate-transcript-2026-05-21_prompt.md` |
+| 09 | `Report/09.golden-master-approval-report-2026-05-21.md` | `Prompt/09.golden-master-approval-transcript-2026-05-21_prompt.md` |
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).
