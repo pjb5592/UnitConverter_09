@@ -59,7 +59,7 @@ add_unit_test(unit_catalog_json_tests tests/unit/entity/unit_catalog_json_tests.
 add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
 add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
-add_executable(unit_converter src/main.cpp)
+add_executable(unit_converter src/main.cpp src/boundary/CliApp.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
 
 add_executable(UnitConverter_test tests/test_golden_master.cpp)

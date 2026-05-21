@@ -20,4 +20,10 @@ std::string readConfigFileContent(const std::string& path);
 UnitCatalog loadCatalogFromJsonContent(const std::string& content);
 UnitCatalog loadCatalogFromJsonFile(const std::string& path);
 
+void registerUnitFromFactorToken(UnitCatalog& catalog, const std::string& name,
+                                 const std::string& factorToken);
+
+UnitCatalog loadCatalogFromYamlContent(const std::string& content);
+UnitCatalog loadCatalogFromYamlFile(const std::string& path);
+
 }  // namespace entity

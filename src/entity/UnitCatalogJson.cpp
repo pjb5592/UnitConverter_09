@@ -75,4 +75,28 @@ UnitCatalog loadCatalogFromJsonFile(const std::string& path) {
     return loadCatalogFromJsonContent(readConfigFileContent(path));
 }
 
+void registerUnitFromFactorToken(UnitCatalog& catalog, const std::string& name,
+                                 const std::string& factorToken) {
+    addUnit(catalog, name, parseFactorToken(factorToken));
+}
+
+UnitCatalog loadCatalogFromYamlContent(const std::string& content) {
+    UnitCatalog catalog = UnitCatalog::empty();
+    static const std::regex yamlEntry(
+        R"re(-\s*name:\s*([a-z][a-z0-9_]*)\s*[\r\n]+\s*factorToMeter:\s*([-+0-9.eE]+))re");
+    const auto begin = std::sregex_iterator(content.begin(), content.end(), yamlEntry);
+    const auto end = std::sregex_iterator();
+    for (auto it = begin; it != end; ++it) {
+        registerUnitFromFactorToken(catalog, (*it)[1].str(), (*it)[2].str());
+    }
+    if (catalog.size() == 0) {
+        throw CatalogJsonError("no units found in yaml config");
+    }
+    return catalog;
+}
+
+UnitCatalog loadCatalogFromYamlFile(const std::string& path) {
+    return loadCatalogFromYamlContent(readConfigFileContent(path));
+}
+
 }  // namespace entity
