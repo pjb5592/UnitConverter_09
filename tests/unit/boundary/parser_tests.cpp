@@ -18,6 +18,14 @@ const entity::UnitCatalog& defaultCatalog() {
 
 }  // namespace
 
+TEST_CASE("test_value_token_from_line_returns_rhs", "[parse][exception]") {
+    const std::string input = "feet:3.28084";
+
+    const std::string valueToken = boundary::InputParser::valueTokenFromLine(input);
+
+    REQUIRE(valueToken == "3.28084");
+}
+
 TEST_CASE("test_parse_happy_meter_25_returns_value", "[parse][exception]") {
     // Given: valid line meter:2.5
     const std::string input = "meter:2.5";

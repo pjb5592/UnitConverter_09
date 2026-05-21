@@ -14,12 +14,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 add_library(unit_entity
-    src/entity/UnitDefinition.cpp
     src/entity/UnitCatalog.cpp
     src/entity/UnitCatalogJson.cpp
     src/entity/LengthConversionEngine.cpp
     src/entity/DisplayRounder.cpp
-    src/entity/UnitConverter.cpp
 )
 target_include_directories(unit_entity PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
@@ -32,6 +30,8 @@ target_link_libraries(unit_data PUBLIC unit_entity)
 add_library(unit_boundary
     src/boundary/InputParser.cpp
     src/boundary/OutputFormatter.cpp
+    src/boundary/ErrorPresenter.cpp
+    src/boundary/CliReader.cpp
 )
 target_include_directories(unit_boundary PUBLIC ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(unit_boundary PUBLIC unit_entity)
@@ -55,15 +55,26 @@ add_unit_test(unit_conversion_tests tests/unit/entity/conversion_tests.cpp)
 add_unit_test(unit_boundary_tests tests/unit/boundary/parser_tests.cpp)
 add_unit_test(unit_catalog_tests tests/unit/entity/catalog_registration_tests.cpp)
 add_unit_test(unit_config_tests tests/unit/data/config_loader_tests.cpp)
+add_unit_test(unit_catalog_json_tests tests/unit/entity/unit_catalog_json_tests.cpp)
 add_unit_test(unit_logic_red_tests tests/unit/entity/logic_track_red_tests.cpp)
 add_unit_test(unit_ui_red_tests tests/unit/boundary/ui_track_red_tests.cpp)
 
-add_executable(unit_converter src/main.cpp)
+add_executable(unit_cli_integration_tests
+    tests/unit/boundary/cli_app_integration_tests.cpp
+    src/boundary/CliApp.cpp)
+target_link_libraries(unit_cli_integration_tests PRIVATE unit_entity unit_data unit_boundary
+                      unit_control Catch2::Catch2WithMain)
+target_include_directories(unit_cli_integration_tests PRIVATE ${CMAKE_SOURCE_DIR}/src
+                                                           ${CMAKE_SOURCE_DIR}/tests)
+add_test(NAME unit_cli_integration_tests COMMAND unit_cli_integration_tests)
+
+add_executable(unit_converter src/main.cpp src/boundary/CliApp.cpp)
 target_link_libraries(unit_converter PRIVATE unit_entity unit_data unit_boundary unit_control)
 
 add_executable(UnitConverter_test tests/test_golden_master.cpp)
-target_link_libraries(UnitConverter_test PRIVATE Catch2::Catch2WithMain)
-target_include_directories(UnitConverter_test PRIVATE ${CMAKE_SOURCE_DIR}/tests)
+target_link_libraries(UnitConverter_test PRIVATE unit_boundary Catch2::Catch2WithMain)
+target_include_directories(UnitConverter_test PRIVATE ${CMAKE_SOURCE_DIR}/src
+                                                      ${CMAKE_SOURCE_DIR}/tests)
 add_dependencies(UnitConverter_test unit_converter)
 target_compile_definitions(UnitConverter_test PRIVATE
     UNIT_CONVERTER_EXE_PATH="$<TARGET_FILE:unit_converter>")

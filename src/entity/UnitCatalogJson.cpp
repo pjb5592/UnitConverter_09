@@ -9,14 +9,12 @@ namespace entity {
 
 namespace {
 
-std::string readFile(const std::string& path) {
-    std::ifstream input(path);
-    if (!input.is_open()) {
-        throw CatalogJsonError("Failed to load unit config: " + path);
+double parseFactorToken(const std::string& token) {
+    try {
+        return std::stod(token);
+    } catch (const std::exception&) {
+        throw CatalogJsonError("invalid factor in config");
     }
-    std::ostringstream buffer;
-    buffer << input.rdbuf();
-    return buffer.str();
 }
 
 void addUnit(UnitCatalog& catalog, const std::string& name, double factor) {
@@ -31,6 +29,16 @@ void addUnit(UnitCatalog& catalog, const std::string& name, double factor) {
 }
 
 }  // namespace
+
+std::string readConfigFileContent(const std::string& path) {
+    std::ifstream input(path);
+    if (!input.is_open()) {
+        throw CatalogJsonError("Failed to load unit config: " + path);
+    }
+    std::ostringstream buffer;
+    buffer << input.rdbuf();
+    return buffer.str();
+}
 
 std::string resolveDefaultUnitsJsonPath() {
     namespace fs = std::filesystem;
@@ -55,7 +63,7 @@ UnitCatalog loadCatalogFromJsonContent(const std::string& content) {
     const auto begin = std::sregex_iterator(content.begin(), content.end(), entryRegex);
     const auto end = std::sregex_iterator();
     for (auto it = begin; it != end; ++it) {
-        addUnit(catalog, (*it)[1].str(), std::stod((*it)[2].str()));
+        addUnit(catalog, (*it)[1].str(), parseFactorToken((*it)[2].str()));
     }
     if (catalog.size() == 0) {
         throw CatalogJsonError("no units found in config");
@@ -64,7 +72,31 @@ UnitCatalog loadCatalogFromJsonContent(const std::string& content) {
 }
 
 UnitCatalog loadCatalogFromJsonFile(const std::string& path) {
-    return loadCatalogFromJsonContent(readFile(path));
+    return loadCatalogFromJsonContent(readConfigFileContent(path));
+}
+
+void registerUnitFromFactorToken(UnitCatalog& catalog, const std::string& name,
+                                 const std::string& factorToken) {
+    addUnit(catalog, name, parseFactorToken(factorToken));
+}
+
+UnitCatalog loadCatalogFromYamlContent(const std::string& content) {
+    UnitCatalog catalog = UnitCatalog::empty();
+    static const std::regex yamlEntry(
+        R"re(-\s*name:\s*([a-z][a-z0-9_]*)\s*[\r\n]+\s*factorToMeter:\s*([-+0-9.eE]+))re");
+    const auto begin = std::sregex_iterator(content.begin(), content.end(), yamlEntry);
+    const auto end = std::sregex_iterator();
+    for (auto it = begin; it != end; ++it) {
+        registerUnitFromFactorToken(catalog, (*it)[1].str(), (*it)[2].str());
+    }
+    if (catalog.size() == 0) {
+        throw CatalogJsonError("no units found in yaml config");
+    }
+    return catalog;
+}
+
+UnitCatalog loadCatalogFromYamlFile(const std::string& path) {
+    return loadCatalogFromYamlContent(readConfigFileContent(path));
 }
 
 }  // namespace entity

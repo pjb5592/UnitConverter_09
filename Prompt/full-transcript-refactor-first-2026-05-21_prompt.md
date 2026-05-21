@@ -2,7 +2,7 @@
 
 **프로젝트:** UnitConverter_09  
 **갱신:** 2026-05-21  
-**브랜치:** green
+**브랜치:** `refactoring` (Step 15 Phase 6 종합 Export)
 
 ---
 
@@ -25,6 +25,76 @@
 | **09** | **golden-master-approval-regression** | CLI stdout Golden Master·approve·ctest 7/7 | ✅ |
 | **10** | **golden-master-gm-tc** | GM-TC-01~04·UnitConverter_test·GoldenMaster ctest | ✅ |
 | **11** | **readme-golden-master-section** | README GM-01~09 체크리스트·목차 | ✅ |
+| **12** | **pre-refactor-test-gap-analysis** | R-01~R-14·스멜·ECB·리팩터 계획·T-01~T-08 | ✅ |
+| **13** | **dual-track-refactor-dod-complete** | 13 REFACTOR 커밋·CliApp·DoD 9/9·lcov gate | ✅ |
+| **14** | **test-coverage-invariant-audit** | lcov/gcov·Invariant 갭·테스트 제안·게이트 PASS | ✅ |
+| **15** | **phase6-dualtrack-summary** | Step 01~14 종합·Phase 6 To-Do·9섹션 Export | ✅ |
+
+---
+
+## Step 15 상세 (2026-05-21)
+
+**User:** 지금까지 작업 Report Export — 9섹션(개요·To-Do·RED/GREEN/REFACTOR·커버리지·미완료·이슈·AI 회고). 파일명 `YYMMDDn_UnitConverter_C++_*`.
+
+**Assistant:**
+- Report 01~14·git·ctest·lcov·TODO·refactoring_plan 수집.
+- **`Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`** — 상세 종합 (RED 14 TC·GREEN 9커밋·REFACTOR 13커밋·TD 표·DEF·AI 팁).
+- **ctest 9/9**, lcov 게이트 PASS (Step 14 수치).
+
+**User:** [P] 문서·배포 — Step 15 Report/Prompt/full-transcript·git push.
+
+**Assistant:**
+- **`Report/15.phase6-dualtrack-summary-report-2026-05-21.md`** — Step 표준 요약.
+- Transcript·full-transcript 갱신 · commit·push.
+
+**검증:** build(기존) ✅ · ctest 9/9 ✅ · 코드 변경 없음.
+
+**다음:** `refactoring`→`main` PR · TODO 체크 동기화 · Step 14 테스트 제안.
+
+---
+
+## Step 14 상세 (2026-05-21)
+
+**User:** 커버리지 점검 — gcov/lcov, Invariant 분기(meter↔feet/yard, 음수, unknown unit), Domain≥95%/Boundary≥85% 미달 시 테스트 제안만(구현 금지). 표 출력.
+
+**Assistant:**
+- `run_coverage_gate.ps1` — ctest **9/9**, entity **95.7%**, boundary **94.8%**, F02 PASS.
+- `UnitConverter.cpp` 루트 스텁; 정본 `LengthConversionEngine.cpp`.
+- **Invariant:** 비율·unknown unit ✅; 음수 Parser ✅ / CliApp ❌; 엔진 L14 factor<=0 ❌ (dead path).
+- 파일별 Miss: Engine 2, UnitCatalogJson 3, InputParser 3, CliApp 2, OutputFormatter 1.
+- 코드 변경 없음; Catch2/IT 보강 제안만.
+
+**검증:** build-cov ✅ · ctest 9/9 ✅ · lcov gate ✅
+
+**다음:** 제안 테스트 RED→GREEN · PR · CI 게이트 연동.
+
+---
+
+## Step 13 상세 (2026-05-21)
+
+**User:** Dual-Track REFACTOR (`refactoring_plan.md`) — 커밋 단위, 계약·F02·테스트 유지. 반복 `진행`/`계속`/`커밋`. 마지막 [P] Report/Prompt Export.
+
+**Assistant:**
+- **12 REFACTOR 커밋:** R-07→R-02→T-04→ErrorPresenter→CliReader→Engine 마이그레이션→`UnitConverter` 제거→`CliApp`→R-01 dual contract→CliApp IT.
+- **DoD:** ctest **9/9**, GoldenMaster CRLF fix, F02 클린, `run_coverage_gate.ps1` (entity 95.7%).
+- **아키텍처:** `main` → `CliApp` only; Control `ConversionUseCase`; Entity `UnitCatalog`+`Engine`.
+
+**검증:** build ✅ · ctest 9/9 ✅ · lcov gate ✅ · 수동 `meter:2.5` → 8.2 feet / 2.7 yard (1자리).
+
+**다음:** `refactoring`→`main` PR · GM-07 CI · README TC 매핑.
+
+---
+
+## Step 12 상세 (2026-05-21)
+
+**User:** `src/` 테스트 갭·`UnitConverter`/`UnitDefinition`/`main` 등 파일별 `*_test(s).cpp` 분석 · 코드 스멜 표 · ECB 3문항 · 리팩터링 계획서(R-U/L, Phase, ctest) · 종합 정리 · [P] Report/Prompt Export.
+
+**Assistant:**
+- 코드 변경 없음. 산출: 테스트 매핑, R-01~R-14, 스멜 20항, ECB `main`→UseCase 권고, 리팩터 Phase 0~4.
+- R-01 블로커: GM 1자리 vs ui_track 6자리. R-L2/L3/L4는 구조상 이미 충족.
+- 검증: build ✅ · unit ctest 6/6 ✅ · GoldenMaster FAIL (CRLF/LF 의심, Windows).
+
+**다음:** R-01 결정 · T-03/T-04 RED · Phase 2 `main` 통합 · GM 줄바꿈·CI GM-07.
 
 ---
 
@@ -227,5 +297,11 @@ docs/PRD.md
 | 09 | `Report/09.golden-master-approval-report-2026-05-21.md` | `Prompt/09.golden-master-approval-transcript-2026-05-21_prompt.md` |
 | 10 | `Report/10.golden-master-gm-tc-report-2026-05-21.md` | `Prompt/10.golden-master-gm-tc-transcript-2026-05-21_prompt.md` |
 | 11 | `Report/11.readme-golden-master-section-report-2026-05-21.md` | `Prompt/11.readme-golden-master-section-transcript-2026-05-21_prompt.md` |
+| 12 | `Report/12.pre-refactor-test-gap-analysis-report-2026-05-21.md` | `Prompt/12.pre-refactor-test-gap-analysis-transcript-2026-05-21_prompt.md` |
+| 13 | `Report/13.dual-track-refactor-dod-complete-report-2026-05-21.md` | `Prompt/13.dual-track-refactor-dod-complete-transcript-2026-05-21_prompt.md` |
+| 14 | `Report/14.test-coverage-invariant-audit-report-2026-05-21.md` | `Prompt/14.test-coverage-invariant-audit-transcript-2026-05-21_prompt.md` |
+| 15 | `Report/15.phase6-dualtrack-summary-report-2026-05-21.md` | `Prompt/15.phase6-dualtrack-summary-transcript-2026-05-21_prompt.md` |
+
+**Step 15 상세 부록:** `Report/2605211_UnitConverter_C++_Phase6-DualTrack_Report.md`
 
 이전: `Prompt/full-transcript-refactor-first-2026-05-20_prompt.md` (Step 01까지).

@@ -48,10 +48,12 @@ public:
             exePath_.string(), scenarioInput, scenarioWork);
         REQUIRE_FALSE(actual.empty());
 
-        if (expected != actual) {
+        const std::string expectedNorm = golden_master::normalizeLineEndings(expected);
+        const std::string actualNorm = golden_master::normalizeLineEndings(actual);
+        if (expectedNorm != actualNorm) {
             golden_master::assertSectionEquals(expected, actual, testId);
         }
-        REQUIRE(expected == actual);
+        REQUIRE(expectedNorm == actualNorm);
     }
 
 private:

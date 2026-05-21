@@ -14,6 +14,7 @@ struct ParsedInput {
 class InputParser {
 public:
     static ParsedInput parse(const std::string& line);
+    static std::string valueTokenFromLine(const std::string& line);
     static ParsedInput parseConvertLine(const std::string& line, const entity::UnitCatalog& catalog);
 };
 
