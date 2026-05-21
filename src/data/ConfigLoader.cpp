@@ -75,8 +75,7 @@ entity::UnitCatalog ConfigLoader::loadWithDefaultsOnMissing(const std::string& p
 }
 
 entity::UnitCatalog ConfigLoader::loadConfig(const std::string& path) {
-    (void)path;
-    return entity::UnitCatalog::empty();
+    return loadWithDefaultsOnMissing(path);
 }
 
 }  // namespace data
