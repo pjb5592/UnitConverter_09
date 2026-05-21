@@ -24,22 +24,37 @@ DecayingUnit::DecayingUnit() : impl_(std::make_unique<Impl>()) {}
 DecayingUnit::~DecayingUnit() = default;
 
 void DecayingUnit::registerUnit(const std::string& name, double ratioToMeter) {
-    (void)name;
-    (void)ratioToMeter;
-    // RED stub: no catalog update, no validation
+    if (ratioToMeter <= 0.0) {
+        throw std::invalid_argument("ratio to meter must be positive");
+    }
+    impl_->items.push_back({name, ratioToMeter});
 }
 
 double DecayingUnit::convert(const std::string& fromUnit, double value,
                             const std::string& toUnit) const {
-    (void)fromUnit;
-    (void)value;
-    (void)toUnit;
-    return 0.0;  // RED stub
+    double fromRatio = 0.0;
+    double toRatio = 0.0;
+    for (const auto& item : impl_->items) {
+        if (item.name == fromUnit) {
+            fromRatio = item.ratioToMeter;
+        }
+        if (item.name == toUnit) {
+            toRatio = item.ratioToMeter;
+        }
+    }
+    if (fromRatio <= 0.0 || toRatio <= 0.0) {
+        throw std::invalid_argument("unknown unit");
+    }
+    const double meters = value * fromRatio;
+    return meters / toRatio;
 }
 
 std::vector<std::pair<std::string, double>> DecayingUnit::convertAll(
     const std::string& fromUnit, double value) const {
-    (void)fromUnit;
-    (void)value;
-    return {};  // RED stub
+    std::vector<std::pair<std::string, double>> rows;
+    rows.reserve(impl_->items.size());
+    for (const auto& item : impl_->items) {
+        rows.emplace_back(item.name, convert(fromUnit, value, item.name));
+    }
+    return rows;
 }
